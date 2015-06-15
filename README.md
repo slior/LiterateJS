@@ -16,6 +16,7 @@ The example provided here shows the usage of the code, combined with the usage o
 
 In order to use this in your file, simply reference the literate.js in your HTML file.
 In your HTML, in order to use a code block, just put your javascript code in `<pre> <code>` tags:
+
 ```
 <pre>
 <code>
@@ -25,10 +26,13 @@ var upperBound = 355000;
 </pre>
 ```
 Combined with Highlight.JS this should also take care of syntax highlighting.
-If you want to embed a Javascript expression inline, simply enclose the expression in `<code>` tag, with an `inline` class.
+If you want to embed a Javascript expression inline, simply enclose the expression in `<code>` tag, with an `inline` class:
+
+```
+The upper bound is <code class="inline">upperBound</code>
+```
 
 Upon loading the page, simply invoke the `evalLitJS()` function, this should take care of the rest.
-
 See the attached [example](https://github.com/slior/LiterateJS/blob/master/euler30.html) to get a better idea.
 
 ## Dependencies
