@@ -17,3 +17,9 @@ function evalInline() {
 		inlines[i].innerText = eval(inlines[i].innerText)
 	
 }
+
+function evalLitJS()
+{
+	evalScriptBlocks();
+	evalInline();
+}
