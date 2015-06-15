@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Euler Problem 30</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+
+	<script type="text/javascript" src="./js/literate.js"></script>
+	
+	<style>
+	
+	body {
+		padding-left:10px
+	}
+	
+	p {
+		text-align:justify
+	}
+	
+	code.inline {
+		font-style : italic;
+	}
+	
+	blockquote {
+		font-size : 90%;
+	}
+	
+	</style>
+	
+    <script type="text/javascript">
+	
+	hljs.initHighlightingOnLoad();
+	
+	function pageLoaded()
+	{
+		evalScriptBlocks();
+		evalInline();
+		
+		//alert(result)
+	}
+	
+	</script>
+</head>
+<body onload="pageLoaded()">
+
+<h1>Euler Problem 30</h1>
+
+<h2>Problem</h2>
+
+<p>
+This problem is described in project Euler, as <a href="https://projecteuler.net/problem=30">problem no. 30</a>, copied here verbatim:
+<blockquote>
+Surprisingly there are only three numbers that can be written as the sum of fourth powers of their digits:
+<br/><br/>
+1634 = 1<sup>4</sup> + 6<sup>4</sup> + 3<sup>4</sup> + 4<sup>4</sup>	<br/>
+8208 = 8<sup>4</sup> + 2<sup>4</sup> + 0<sup>4</sup> + 8<sup>4</sup>	<br/>
+9474 = 9<sup>4</sup> + 4<sup>4</sup> + 7<sup>4</sup> + 4<sup>4</sup>	<br/>
+<br/>
+As 1 = 1<sup>4</sup> is not a sum it is not included.	<br/>
+<br/>
+The sum of these numbers is 1634 + 8208 + 9474 = 19316.<br/>
+<br/>
+Find the sum of all the numbers that can be written as the sum of fifth powers of their digits.
+</blockquote>
+</p>
+
+<h2>Solution</h2>
+
+<p>
+We set the power to raise to be 5, as per the problem's definition. <br/>
+Brute force search should be enough for this problem, but we need to set the upper bound for that. How do we find it?<br/>
+Well, 9<sup>5</sup> = <code class="inline">Math.pow(9,power)</code>, which is a 5-digit number; i.e. the solution will have at least 5 numbers.<br/>
+This brings us to 5*9<sup>5</sup> = <code class="inline">5 * Math.pow(9,power)</code>, which is a 6 digit number.<br/>
+Hence, we come to 6 * 9<sup>5</sup> = <code class="inline">6 * Math.pow(9,power)</code>, and rounding up a bit will leave us at 355000.
+</p>
+
+<pre>
+<code>
+var power = 5;
+var upperBound = 355000;
+</code>
+</pre>
+
+We now pre-compute the 5<sup>th</sup> power of all the digits, so we can reuse that quickly in our solution:
+<pre>
+<code class="js">
+var digitsPowered = [];
+for (i = 0; i < 10; i++)
+	digitsPowered.push(Math.pow(i,power))
+</code>
+</pre>
+<p>
+We'll also define a small helper function for summarizing an array of numbers:
+<pre>
+<code>
+var sum = function(arr) { return arr.reduce(function(pv,cv) { return pv+cv},0); };
+</code>
+</pre>
+
+And now we're ready to solve, essentially a brute force search:
+</p>
+
+<pre>
+<code>
+
+var sumPowerDigits = function(num)
+{
+	return sum(num.toString()
+			.split("")
+			.map(function(d) {
+				return digitsPowered[parseInt(d)];
+			}));
+};
+
+var isSumOfDigitsPowered = function(num) { return num == sumPowerDigits(num); };
+
+
+var validValues = [];
+for (i = 10; i < upperBound; i++)
+	if (isSumOfDigitsPowered(i))
+		validValues.push(i);
+
+var result = sum(validValues);
+
+</code>
+</pre>
+
+And this results in : <code class="inline">result</code> 
+
+
+</body>
+</html>
