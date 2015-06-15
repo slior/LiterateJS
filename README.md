@@ -1,7 +1,7 @@
 # LiterateJS
 Implementing literate programming in Javascript, for the browser.
 
-This is an attempt at implementing the idea of (Literate Programming)[https://en.wikipedia.org/wiki/Literate_programming] in a simple Javascript and HTML setting.
+This is an attempt at implementing the idea of [Literate Programming](https://en.wikipedia.org/wiki/Literate_programming) in a simple Javascript and HTML setting.
 
 The goal is to enable a simple literate programming model, which is immediately rendered and executable by a modern browser.
 HTML combined with Javascript is actually a great fit: all the presentation is already there, and the execution engine is readily available in the browser.
@@ -15,7 +15,7 @@ The example provided here shows the usage of the code, combined with the usage o
 ## Usage
 
 In order to use this in your file, simply reference the literate.js in your HTML file.
-In your HTML, in order to use a code block, just put your javascript code in <pre> <code> tags:
+In your HTML, in order to use a code block, just put your javascript code in `<pre> <code>` tags:
 ```
 <pre>
 <code>
