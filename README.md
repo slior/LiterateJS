@@ -32,7 +32,7 @@ If you want to embed a Javascript expression inline, simply enclose the expressi
 The upper bound is <code class="inline">upperBound</code>
 ```
 
-Upon loading the page, simply invoke the `evalLitJS()` function, this should take care of the rest.
+Upon loading the page, simply invoke the `LitJS.eval()` function, this should take care of the rest.
 See the attached [example](https://github.com/slior/LiterateJS/blob/master/euler30.html) to get a better idea.
 
 ### Providing Titles
@@ -45,6 +45,8 @@ For example:
 ```
 
 This will result in a panel with a title, using the value of the `title` attribute provided.
+This method uses bootstrap classes to render the resulting HTML. 
+
 You can of course use any other valid HTML to produce the title directly. The example shows both methods.
 
 ## Dependencies

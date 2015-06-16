@@ -36,8 +36,11 @@ function evalInline(jq)
 	
 }
 
-function evalLitJS()
-{
-	evalScriptBlocks();
-	evalInline();
+
+var LitJS = {
+	eval : function()
+	{
+		evalScriptBlocks();
+		evalInline();
+	}
 }

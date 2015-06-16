@@ -35,11 +35,7 @@
 	
 	function pageLoaded()
 	{
-		evalLitJS();
-		//evalScriptBlocks();
-		//evalInline();
-		
-		
+		LitJS.eval();
 	}
 	
 	</script>
@@ -97,9 +93,7 @@ We'll also define a small helper function for summarizing an array of numbers:
 <div class="panel panel-default">
     <div class="panel-heading">Helper</div>
     <div class="panel-body">
-		<pre><code>
-		var sum = function(arr) { return arr.reduce(function(pv,cv) { return pv+cv},0); };
-		</code></pre>
+		<pre><code>var sum = function(arr) { return arr.reduce(function(pv,cv) { return pv+cv},0); };</code></pre>
 	</div>
 </div>
 
