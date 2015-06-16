@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Literate JS Tests</title>
+  <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.18.0.css">
+  <script src="../js/literate.js"></script>
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script src="http://code.jquery.com/qunit/qunit-1.18.0.js"></script>
+  <script>
+  
+	var _ = QUnit;
+  
+	//_.module("Script Blocks")
+    _.test( "Inserting a simple block", function( assert ) 
+	{
+		assert.expect(3)
+		var testScript = "var x = 5";
+		function mockJQ(selector)
+		{
+			assert.deepEqual(selector,'pre code', "Looks for 'pre code' elements");
+			return [{innerText : testScript}];
+		}
+		
+		var mockDoc = 
+		{
+			createElement : function(tag) { assert.deepEqual(tag,"script", "Creates a 'script' tag"); return {  }; },
+			head : {
+				appendChild : function(js) {
+					assert.deepEqual(js.innerText,testScript, 'appends script elements to head')
+				}
+			}
+		};
+		
+		evalScriptBlocks(mockJQ,mockDoc)
+    });
+	
+	_.test("Evaluating a simple block", function(assert) 
+	{
+		assert.expect(2)
+		var testScript = "var x = 5";
+		function mockJQ(selector)
+		{
+			assert.deepEqual(selector,'pre code', "Expecting to search for 'pre code'");
+			return [{innerText : testScript}];
+		}
+		
+		evalScriptBlocks(mockJQ);
+		assert.ok( x == 5,"Should have a variable named x with the value of 5")
+	});
+	
+	
+	
+  </script>
+</body>
+</html>

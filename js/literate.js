@@ -1,16 +1,21 @@
 
-function evalScriptBlocks() {
+function evalScriptBlocks(jq,_doc)
+{
+	var $ = jq || jQuery
+	var doc = _doc || document
 	
-  var codeBlocks = $('pre code') //relies on jquery, but can be done without it as well.
-  for (var i = 0; i < codeBlocks.length; i++) {
-    var js = document.createElement('script');
-	js.innerText = codeBlocks[i].innerText;
-	document.head.appendChild(js);
-  }
+	var codeBlocks = $('pre code')
+	for (var i = 0; i < codeBlocks.length; i++) 
+	{
+		var js = doc.createElement('script');
+		js.innerText = codeBlocks[i].innerText;
+		doc.head.appendChild(js);
+	}
 }
 
-function evalInline() {
-	
+function evalInline(jq)
+{
+	var $ = jq || jQuery
 	var inlines = $('code.inline')
 	
 	for (var i = 0, l = inlines.length; i < l; i++)
