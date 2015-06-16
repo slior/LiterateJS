@@ -94,16 +94,20 @@ for (i = 0; i < 10; i++)
 </pre>
 <p>
 We'll also define a small helper function for summarizing an array of numbers:
-<pre>
-<code>
-var sum = function(arr) { return arr.reduce(function(pv,cv) { return pv+cv},0); };
-</code>
-</pre>
+<div class="panel panel-default">
+    <div class="panel-heading">Helper</div>
+    <div class="panel-body">
+		<pre><code>
+		var sum = function(arr) { return arr.reduce(function(pv,cv) { return pv+cv},0); };
+		</code></pre>
+	</div>
+</div>
+
 
 And now we're ready to solve, essentially a brute force search:
 </p>
 
-<pre>
+<pre title="Solution">
 <code>
 
 var sumPowerDigits = function(num)

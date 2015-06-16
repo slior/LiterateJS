@@ -35,6 +35,18 @@ The upper bound is <code class="inline">upperBound</code>
 Upon loading the page, simply invoke the `evalLitJS()` function, this should take care of the rest.
 See the attached [example](https://github.com/slior/LiterateJS/blob/master/euler30.html) to get a better idea.
 
+### Providing Titles
+You can wrap a code block in a panel with a title simply by providing a title attribute to the `pre` tag.
+For example:
+```
+<pre title="Solution">
+<code> ... </code>
+</pre>
+```
+
+This will result in a panel with a title, using the value of the `title` attribute provided.
+You can of course use any other valid HTML to produce the title directly. The example shows both methods.
+
 ## Dependencies
 
 The code depends on JQuery, though this dependency can be easily removed at this time.
