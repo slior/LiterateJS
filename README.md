@@ -41,8 +41,11 @@ The code depends on JQuery, though this dependency can be easily removed at this
 Other than that, the example uses Bootstrap and Highlight.JS, but the literate programming doesn't rely on that.
 
 ## TODO/Further Enhancements
+(in no particular order)
 
 - Support markdown
 - Reusing/referencing code blocks from other code blocks.
 - Other languages?
 - Expanding/Collapsing code blocks.
+- create CSS, at least for the basic "inline"
+- supporting re-evaluation of blocks, on demand
