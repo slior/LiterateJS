@@ -8,7 +8,7 @@ function evalScriptBlocks(jq,_doc)
 	for (var i = 0; i < codeBlocks.length; i++) 
 	{
 		var js = doc.createElement('script');
-		js.innerText = codeBlocks[i].innerText;
+		js.innerHTML = codeBlocks[i].innerText;
 		doc.head.appendChild(js);
 	}
 }

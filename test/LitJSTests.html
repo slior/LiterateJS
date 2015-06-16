@@ -14,23 +14,29 @@
   
 	var _ = QUnit;
   
-	//_.module("Script Blocks")
+  
+	function mockScript(script,assertionBlock)
+	{
+		return function(selector)
+		{
+			if (assertionBlock) assertionBlock(selector);
+			return script ? [{innerText : script}] : [];
+		}
+	}
+  
     _.test( "Inserting a simple block", function( assert ) 
 	{
 		assert.expect(3)
 		var testScript = "var x = 5";
-		function mockJQ(selector)
-		{
-			assert.deepEqual(selector,'pre code', "Looks for 'pre code' elements");
-			return [{innerText : testScript}];
-		}
+		var mockJQ = mockScript(testScript,
+						function(selector) { assert.deepEqual(selector,'pre code', "Looks for 'pre code' elements"); })
 		
 		var mockDoc = 
 		{
 			createElement : function(tag) { assert.deepEqual(tag,"script", "Creates a 'script' tag"); return {  }; },
 			head : {
 				appendChild : function(js) {
-					assert.deepEqual(js.innerText,testScript, 'appends script elements to head')
+					assert.deepEqual(js.innerHTML,testScript, 'appends script elements to head')
 				}
 			}
 		};
@@ -40,20 +46,27 @@
 	
 	_.test("Evaluating a simple block", function(assert) 
 	{
-		assert.expect(2)
-		var testScript = "var x = 5";
-		function mockJQ(selector)
-		{
-			assert.deepEqual(selector,'pre code', "Expecting to search for 'pre code'");
-			return [{innerText : testScript}];
-		}
-		
-		evalScriptBlocks(mockJQ);
+		evalScriptBlocks(mockScript("var x = 5"));
 		assert.ok( x == 5,"Should have a variable named x with the value of 5")
 	});
 	
+	_.test("Evaluates multi-line script", function(assert) {
+		var testScript = "var x = 5 \n var y = x + 2"
+		
+		evalScriptBlocks(mockScript(testScript));
+		assert.ok(y == 7, "Should evaluate y to 7")
+	})
 	
-	
+	_.test("No code blocks ==> should not create new script tags",function(assert) {
+		assert.expect(0)
+		var mockDoc = {
+			createElement : function(tag) { assert.ok(false,"createElement shouldn't be called")},
+			head : {
+				appendChild : function(js) { assert.ok(false, "document.head.appendChild shouldn't be called")}
+			}
+		}
+		evalScriptBlocks(mockScript(),mockDoc)
+	})
   </script>
 </body>
 </html>
