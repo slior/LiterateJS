@@ -21,7 +21,7 @@
 		return function(selector)
 		{
 			if (assertionBlock) assertionBlock(selector);
-			return script ? [{innerText : script}] : [];
+			return script ? [{innerText : script, parentElement: {}}] : [];
 		}
 	}
 	
@@ -70,6 +70,36 @@
 		evalScriptBlocks(mockScript(),mockDoc)
 	})
 	
+	_.test("A script block with a title should have a header", function(assert) {
+		var testScript = "var y = 38";
+		var testTitle = "Test Title"
+		var mockJQ = function(selector) 
+		{
+			if (typeof(selector) == 'string')
+			{
+				assert.deepEqual(selector,"pre code","Selects 'pre code' elements")
+				return [{innerText : testScript, parentElement : { title : testTitle}}]
+			}
+			else //wrapping an object
+			{
+				return {
+					wrap : function(html) { 
+						assert.deepEqual(html,"<div class='panel panel-info'><div class='panel-body'></div></div>",
+									"Creates divs with correct styles");
+					},
+					parent : function() {
+						return {
+							before : function(html) {
+								assert.deepEqual(html,"<div class='panel-heading'>" + (testTitle) + "</div>",
+												 "Creates a heading with the passed title and correct styles")
+							}
+						}
+					}
+				}
+			}
+		}
+		evalScriptBlocks(mockJQ);
+	})
 	
 	_.module("Inline Expressions")
 	_.test("Flow of inline script evaluation", function(assert){
