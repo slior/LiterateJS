@@ -14,7 +14,7 @@ The example provided here shows the usage of the code, combined with the usage o
 
 ## Usage
 
-In order to use this in your file, simply reference the literate.js in your HTML file.
+In order to use this in your file, simply reference the `js/literate.js` and `css/LitJS.css` files in your HTML file.
 In your HTML, in order to use a code block, just put your javascript code in `<pre> <code>` tags:
 
 ```
