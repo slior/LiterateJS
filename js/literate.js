@@ -1,4 +1,12 @@
 
+var LitJS = {
+	eval : function()
+	{
+		evalScriptBlocks();
+		evalInline();
+	}
+}
+
 function evalScriptBlocks(jq,_doc)
 {
 	var $ = jq || jQuery
@@ -7,11 +15,8 @@ function evalScriptBlocks(jq,_doc)
 	var codeBlocks = $('pre code')
 	for (var i = 0; i < codeBlocks.length; i++) 
 	{
-		var js = doc.createElement('script');
-		var codeBlock = codeBlocks[i];
-		js.innerHTML = codeBlock.innerText;
-		doc.head.appendChild(js);
-		
+		var codeBlock = codeBlocks[i]
+		createAndInsertJS(codeBlock,doc)
 		if (codeBlock.parentElement.title)
 			wrapInPanel($(codeBlock.parentElement),codeBlock.parentElement.title);
 	}
@@ -26,6 +31,13 @@ function wrapInPanel(preElement,title)
 	
 }
 
+function createAndInsertJS(codeBlock,doc)
+{
+	var js = doc.createElement('script');
+	js.innerHTML = codeBlock.innerText;
+	doc.head.appendChild(js);
+}
+
 function evalInline(jq)
 {
 	var $ = jq || jQuery
@@ -37,10 +49,4 @@ function evalInline(jq)
 }
 
 
-var LitJS = {
-	eval : function()
-	{
-		evalScriptBlocks();
-		evalInline();
-	}
-}
+
