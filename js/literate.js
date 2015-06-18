@@ -4,7 +4,8 @@ var LitJS = {
 	{
 		evalScriptBlocks();
 		evalInline();
-	}
+	},
+	lastID : 0
 }
 
 function evalScriptBlocks(jq,_doc)
@@ -15,21 +16,45 @@ function evalScriptBlocks(jq,_doc)
 	var codeBlocks = $('pre code')
 	for (var i = 0; i < codeBlocks.length; i++) 
 	{
-		var codeBlock = codeBlocks[i]
-		createAndInsertJS(codeBlock,doc)
-		if (codeBlock.parentElement.title)
-			wrapInPanel($(codeBlock.parentElement),codeBlock.parentElement.title);
+		var lcb = new LitCodeBlock(codeBlocks[i])
+		lcb.insertJSTo(doc)
+		if (lcb.title)
+			wrapInPanel($(codeBlocks[i].parentElement),lcb.title,lcb.isCollapsible)
 	}
 }
 
-function wrapInPanel(preElement,title)
+
+function LitCodeBlock(htmlCodeNode)
 {
-	preElement.wrap("<div class='panel panel-info'><div class='panel-body'></div></div>")
-	var bodyDiv = preElement.parent()
+	this.title = htmlCodeNode.parentElement.title
+	this.isCollapsible = typeof (htmlCodeNode.parentElement.attributes["collapsible"]) != "undefined"
+	this.code = htmlCodeNode.innerText
+	this.parent = $(htmlCodeNode.parentElement)
+	this.insertJSTo = function (doc)
+	{
+		var js = doc.createElement('script');
+		js.innerHTML = this.code
+		doc.head.appendChild(js);
+	}
 	
-	bodyDiv.before("<div class='panel-heading'>" + (title||"Code") + "</div>")
+	return this;
+}
+
+function wrapInPanel(preElement,title,collapsible,_id)
+{
+	var id = _id || generateBlockID()
+	preElement.wrap("<div class='panel panel-info'><div class='panel-body' id='" + id + "'></div></div>")
+	var bodyDiv = preElement.parent()
+	var collapseLink = collapsible ? " <a href=\"javascript:$('#" + id + "').toggle()\">&times;</a>" : ""
+	bodyDiv.before("<div class='panel-heading'>" + (title||"Code") + collapseLink + "</div>")
 	
 }
+
+function generateBlockID()
+{
+	return "block_" + (LitJS.lastID++)
+}
+
 
 function createAndInsertJS(codeBlock,doc)
 {

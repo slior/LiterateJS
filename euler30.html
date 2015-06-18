@@ -91,8 +91,8 @@ for (i = 0; i < 10; i++)
 <p>
 We'll also define a small helper function for summarizing an array of numbers:
 <div class="panel panel-default">
-    <div class="panel-heading">Helper</div>
-    <div class="panel-body">
+    <div class="panel-heading">Helper <a href="javascript:$('#helperCode').toggle()">&times;</a></div>
+    <div class="panel-body" id="helperCode">
 		<pre><code>var sum = function(arr) { return arr.reduce(function(pv,cv) { return pv+cv},0); };</code></pre>
 	</div>
 </div>
@@ -101,7 +101,7 @@ We'll also define a small helper function for summarizing an array of numbers:
 And now we're ready to solve, essentially a brute force search:
 </p>
 
-<pre title="Solution">
+<pre title="Solution" collapsible>
 <code>
 
 var sumPowerDigits = function(num)
