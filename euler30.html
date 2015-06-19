@@ -31,6 +31,11 @@
 	
     <script type="text/javascript">
 	
+	function toggle(el)
+	{
+		el.text(el.text() == '-' ? '+' : '-')
+	}
+	
 	hljs.initHighlightingOnLoad();
 	
 	function pageLoaded()
@@ -91,7 +96,7 @@ for (i = 0; i < 10; i++)
 <p>
 We'll also define a small helper function for summarizing an array of numbers:
 <div class="panel panel-default">
-    <div class="panel-heading">Helper <a href="javascript:$('#helperCode').toggle()">&times;</a></div>
+    <div class="panel-heading">Helper <a href="javascript:$('#helperCode').toggle(); toggle($('#helperCode').parent().children('.panel-heading').children())">-</a></div>
     <div class="panel-body" id="helperCode">
 		<pre><code>var sum = function(arr) { return arr.reduce(function(pv,cv) { return pv+cv},0); };</code></pre>
 	</div>

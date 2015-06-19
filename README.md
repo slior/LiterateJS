@@ -12,6 +12,14 @@ With a good stylesheet, and accompanied syntax highlighting, this provides, in m
 
 The example provided here shows the usage of the code, combined with the usage of [bootstrap](http://getbootstrap.com/css/) for formatting and highlight.js for syntax highlighting.
 
+## Playing Well With Standards
+
+As a general rule, the method used here tries to be minimalistic in its usage of other technologies and its proprietary way of doing things.
+The main drive for this is to present a method for achieving literate programming, but still be open to other standards and tools.
+To enable easy incorporation of other tools and frameworks. This is the reason we try to stick to HTML and plain Javascript. JQuery is used in the code mainly for its capabilities around DOM navigation and manipulation.
+The example shows how to incoporate Highlight.JS and bootstrap. The default style sheet for generated code is bootstrap (with future plan to decouple this as well).
+
+
 ## Usage
 
 In order to use this in your file, simply reference the `js/literate.js` and `css/LitJS.css` files in your HTML file.
@@ -48,6 +56,19 @@ This will result in a panel with a title, using the value of the `title` attribu
 This method uses bootstrap classes to render the resulting HTML. 
 
 You can of course use any other valid HTML to produce the title directly. The example shows both methods.
+
+#### Collapsible Blocks
+
+When providing a title, you also have the option to designate the block as a collapsible block.
+If you do that, a small text "button" will appear near the title, allowing the user to collapse and expand the title at will.
+For example: 
+```
+<pre title="Solution" collapsible>
+<code> ... </code>
+</pre>
+```
+
+As previously, you have the option to do it yourself, with different styles/characters.
 
 ## Dependencies
 

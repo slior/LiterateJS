@@ -43,11 +43,16 @@ function LitCodeBlock(htmlCodeNode)
 function wrapInPanel(preElement,title,collapsible,_id)
 {
 	var id = _id || generateBlockID()
+
 	preElement.wrap("<div class='panel panel-info'><div class='panel-body' id='" + id + "'></div></div>")
 	var bodyDiv = preElement.parent()
-	var collapseLink = collapsible ? " <a href=\"javascript:$('#" + id + "').toggle()\">&times;</a>" : ""
+	var collapseLink = collapsible ? " <a href=\"javascript:$('#" + id + "').toggle(); toggleCollapseSymbol($('#" + id + "').parent().children('.panel-heading').children())\">[-]</a>" : ""
 	bodyDiv.before("<div class='panel-heading'>" + (title||"Code") + collapseLink + "</div>")
-	
+}
+
+function toggleCollapseSymbol(el)
+{
+	el.text(el.text() == '[-]' ? '[+]' : '[-]')
 }
 
 function generateBlockID()
