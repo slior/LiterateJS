@@ -14,13 +14,25 @@ function evalScriptBlocks(jq,_doc)
 	var doc = _doc || document
 	
 	var codeBlocks = $('pre code')
+	var snippets = []
 	for (var i = 0; i < codeBlocks.length; i++) 
 	{
 		var lcb = new LitCodeBlock(codeBlocks[i])
-		lcb.insertJSTo(doc)
+		//lcb.insertJSTo(doc)
+		snippets.push(lcb.code)
 		if (lcb.title)
 			wrapInPanel($(codeBlocks[i].parentElement),lcb.title,lcb.isCollapsible)
 	}
+	
+	if (snippets.length > 0) //actually create and insert the JS element. This also executes the script
+	{
+		var js = doc.createElement('script')
+		js.type = "text/javascript"
+		js.text = snippets.join("\n")
+		doc.head.appendChild(js)	
+	}
+	
+	
 }
 
 
@@ -33,7 +45,9 @@ function LitCodeBlock(htmlCodeNode)
 	this.insertJSTo = function (doc)
 	{
 		var js = doc.createElement('script');
-		js.innerHTML = this.code
+		js.type = "text/javascript"
+		
+		js.text = this.code
 		doc.head.appendChild(js);
 	}
 	

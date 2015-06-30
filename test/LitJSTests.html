@@ -38,7 +38,7 @@
 			createElement : function(tag) { assert.deepEqual(tag,"script", "Creates a 'script' tag"); return {  }; },
 			head : {
 				appendChild : function(js) {
-					assert.deepEqual(js.innerHTML,testScript, 'appends script elements to head')
+					assert.deepEqual(js.text,testScript, 'appends script elements to head')
 				}
 			}
 		};
