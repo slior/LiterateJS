@@ -43,19 +43,19 @@
 			}
 		};
 		
-		evalScriptBlocks(mockJQ,mockDoc)
+		LitJS.evalScriptBlocks(mockJQ,mockDoc)
     });
 	
 	_.test("Evaluating a simple block", function(assert) 
 	{
-		evalScriptBlocks(mockScript("var x = 5"));
+		LitJS.evalScriptBlocks(mockScript("var x = 5"));
 		assert.ok( x == 5,"Should have a variable named x with the value of 5")
 	});
 	
 	_.test("Evaluates multi-line script", function(assert) {
 		var testScript = "var x = 5 \n var y = x + 2"
 		
-		evalScriptBlocks(mockScript(testScript));
+		LitJS.evalScriptBlocks(mockScript(testScript));
 		assert.ok(y == 7, "Should evaluate y to 7")
 	})
 	
@@ -67,7 +67,7 @@
 				appendChild : function(js) { assert.ok(false, "document.head.appendChild shouldn't be called")}
 			}
 		}
-		evalScriptBlocks(mockScript(),mockDoc)
+		LitJS.evalScriptBlocks(mockScript(),mockDoc)
 	})
 	
 	_.test("A script block with a title should have a header", function(assert) {
@@ -98,7 +98,7 @@
 				}
 			}
 		}
-		evalScriptBlocks(mockJQ);
+		LitJS.evalScriptBlocks(mockJQ);
 	})
 	
 	_.module("Inline Expressions")
@@ -113,7 +113,7 @@
 			return [mockExprEl];
 		}
 		
-		evalInline(mockJQ);
+		LitJS.evalInline(mockJQ);
 		assert.deepEqual(mockExprEl.innerText,4,"Should switch element's inner text to script evaluation result")
 	})
   </script>
