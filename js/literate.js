@@ -12,13 +12,13 @@ var LitJS = {
 		
 		var codeBlocks = $('pre code')
 		var snippets = []
+		//snippets.push(this.codeBlockHeader())
 		for (var i = 0; i < codeBlocks.length; i++) 
 		{
 			var lcb = new LitCodeBlock(codeBlocks[i])
-			//lcb.insertJSTo(doc)
-			snippets.push(lcb.code)
+			snippets.push(lcb.wrappedCode())
 			if (lcb.title)
-				this.wrapInPanel($(codeBlocks[i].parentElement),lcb.title,lcb.isCollapsible)
+				this.wrapInPanel($(codeBlocks[i].parentElement),lcb.title,lcb.isCollapsible,lcb.id)
 		}
 		
 		if (snippets.length > 0) //actually create and insert the JS element. This also executes the script
@@ -28,6 +28,10 @@ var LitJS = {
 			js.text = snippets.join("\n")
 			doc.head.appendChild(js)	
 		}	
+	},
+	codeBlockHeader : function()
+	{
+		//ret.push()
 	},
 	evalInline : function(jq)
 	{
@@ -62,6 +66,7 @@ function LitCodeBlock(htmlCodeNode)
 	this.isCollapsible = typeof (htmlCodeNode.parentElement.attributes["collapsible"]) != "undefined"
 	this.code = htmlCodeNode.innerText
 	this.parent = $(htmlCodeNode.parentElement)
+	this.id = htmlCodeNode.parentElement.id || LitJS.generateBlockID()
 	this.insertJSTo = function (doc)
 	{
 		var js = doc.createElement('script');
@@ -71,6 +76,18 @@ function LitCodeBlock(htmlCodeNode)
 		doc.head.appendChild(js);
 	}
 	
+	this.wrappedCode = function()
+	{
+		var ret = []
+		ret.push("try {")
+			ret.push(this.code)
+		ret.push("}")
+		ret.push("catch (exn) {")
+			ret.push("alert('Error in block " + this.id + ": ' + exn);")
+		ret.push("}")
+		
+		return ret.join("\n")
+	}
 	return this;
 }
 
