@@ -92,5 +92,4 @@ See the [interactive example](https://github.com/slior/LiterateJS/blob/master/ex
 
 ## Dependencies
 
-The code depends on JQuery, though this dependency can be easily removed at this time.
-Other than that, the example uses Bootstrap and Highlight.JS, but the literate programming doesn't rely on that.
+The code depends on JQuery. Other than that, the example uses Bootstrap and Highlight.JS, but the literate programming doesn't rely on that.
