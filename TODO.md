@@ -16,3 +16,4 @@
 - Add the option to see the imported/used scripts in the file. To (optionally) nicely show references
 - Utility functions
   - Displaying tabular data easily
+- Add interaction with other input types

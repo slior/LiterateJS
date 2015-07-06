@@ -73,7 +73,22 @@ As previously, you have the option to do it yourself, with different styles/char
 ### Error Handling
 If an error is raised in one of the blocks, LiterateJS will raise an error, by default using `windows.alert`.
 It will report the id of the code block. LiterateJS will provide an default if none is provided by you.
-For an example of this, refer to the [error example](https://github.com/slior/LiterateJS/blob/master/examples/error_example.html)
+For an example of this, refer to the [error example](https://github.com/slior/LiterateJS/blob/master/examples/error_example.html).
+
+### Interactive Literate Blocks
+Blocks can also reference values that are given by in-page input elements.
+For example, given an input element: 
+```
+<input type=number id=y class="lit-value" />
+```
+Another code block in the same page can now reference `y` as a variable, with the value given in the input.
+For example:
+```
+var x = y + 2;
+```
+This is also bound to the inputs' change events, so code blocks will get re-evaluated, and inline code snippets will be updated.
+See the [interactive example](https://github.com/slior/LiterateJS/blob/master/examples/interactive_example.html) for a more complete example.
+
 
 ## Dependencies
 
