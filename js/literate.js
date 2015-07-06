@@ -2,8 +2,47 @@
 var LitJS = {
 	eval : function()
 	{
+		this.evalInputs();
 		this.evalScriptBlocks();
 		this.evalInline();
+	},
+	evalInputs : function(jq,_doc)
+	{
+		var $ = jq || jQuery
+		var doc = _doc || document
+		var litJSInputsScriptID = "litjs-inputs"
+		
+		function _evalInputs()
+		{
+			var snippets = []
+			$('input.lit-value').toArray().forEach(function(inp) {
+				if (inp.id)
+					snippets.push("var " + inp.id + " = " + inp.value + ";")
+			})
+			
+			if (snippets.length > 0)
+				this.createAndInsertJS(snippets.join("\n"),doc,litJSInputsScriptID)
+		}
+		
+		_evalInputs.apply(this)
+
+		$('input.lit-value').change(function(inp) { //naive implementation - for every change reevaluate all inputs
+			$("#" + litJSInputsScriptID).remove();
+			_evalInputs.apply(LitJS)
+			
+			$("#" + LitJS.BlocksScriptID).remove();
+			LitJS.evalScriptBlocks();
+			LitJS.evalInline();
+			
+		})
+	},
+	createAndInsertJS : function(code,doc,id)
+	{
+			var js = doc.createElement('script')
+			js.type = "text/javascript"
+			js.text = code
+			if (id) js.id = id;
+			doc.head.appendChild(js)	
 	},
 	evalScriptBlocks : function(jq,_doc)
 	{
@@ -12,7 +51,7 @@ var LitJS = {
 		
 		var codeBlocks = $('pre code')
 		var snippets = []
-		//snippets.push(this.codeBlockHeader())
+		
 		for (var i = 0; i < codeBlocks.length; i++) 
 		{
 			var lcb = new LitCodeBlock(codeBlocks[i])
@@ -22,24 +61,30 @@ var LitJS = {
 		}
 		
 		if (snippets.length > 0) //actually create and insert the JS element. This also executes the script
-		{
-			var js = doc.createElement('script')
-			js.type = "text/javascript"
-			js.text = snippets.join("\n")
-			doc.head.appendChild(js)	
-		}	
+			this.createAndInsertJS(snippets.join("\n"),doc,this.BlocksScriptID)
+	},
+	codeBlockFooter : function()
+	{
+		return "}\n" + this.BlocksFunctionName + "();"
 	},
 	codeBlockHeader : function()
 	{
-		//ret.push()
+		return "function " + this.BlocksFunctionName + "() {"
 	},
+	BlocksFunctionName : "LIT_CODE",
+	BlocksScriptID : "litjs-block",
 	evalInline : function(jq)
 	{
 		var $ = jq || jQuery
 		var inlines = $('code.inline')
 		
 		for (var i = 0, l = inlines.length; i < l; i++)
-			inlines[i].innerText = eval(inlines[i].innerText)
+		{
+			var inlineBlock = inlines[i]
+			var codeToEval = inlineBlock.code || inlineBlock.innerText
+			inlineBlock.innerText = eval(codeToEval)
+			inlineBlock.code = codeToEval;
+		}
 		
 	},
 	wrapInPanel : function (preElement,title,collapsible,_id)

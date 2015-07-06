@@ -118,6 +118,27 @@
 		LitJS.evalInline(mockJQ);
 		assert.deepEqual(mockExprEl.innerText,4,"Should switch element's inner text to script evaluation result")
 	})
+	
+	_.module("Interactive LitJS")
+	_.test("A litjs value input should be picked up",function(assert) {
+		var mockInp = {
+			toArray : function() { 
+						return [
+							{ id : "id1", value : 2 }
+						]; 
+					},
+			change : function(f) {
+				assert.ok(true,"Change is called on the 'lit-value' inputs")
+			}
+		}
+		var mockJQ = function(selector)
+		{
+			assert.deepEqual(selector,'input.lit-value',"Looks for 'lit-value' inputs")
+			return mockInp
+		}
+		
+		LitJS.evalInputs(mockJQ)
+	})
   </script>
 </body>
 </html>
