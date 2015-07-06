@@ -41,7 +41,7 @@ The upper bound is <code class="inline">upperBound</code>
 ```
 
 Upon loading the page, simply invoke the `LitJS.eval()` function, this should take care of the rest.
-See the attached [example](https://github.com/slior/LiterateJS/blob/master/euler30.html) to get a better idea.
+See the attached [example](https://github.com/slior/LiterateJS/blob/master/examples/euler30.html) to get a better idea.
 
 ### Providing Titles
 You can wrap a code block in a panel with a title simply by providing a title attribute to the `pre` tag.
@@ -69,6 +69,11 @@ For example:
 ```
 
 As previously, you have the option to do it yourself, with different styles/characters.
+
+### Error Handling
+If an error is raised in one of the blocks, LiterateJS will raise an error, by default using `windows.alert`.
+It will report the id of the code block. LiterateJS will provide an default if none is provided by you.
+For an example of this, refer to the [error example](https://github.com/slior/LiterateJS/blob/master/examples/error_example.html)
 
 ## Dependencies
 
