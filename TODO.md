@@ -13,3 +13,4 @@
 - decouple the styles from the code using them
 - ~~reporting errors in literate code block properly~~
   - Allow for more control of how errors are reported (maybe a custom panel/fixture?)
+- Add the option to see the imported/used scripts in the file. To (optionally) nicely show references
