@@ -3,8 +3,16 @@ var LitJS = {
 	eval : function()
 	{
 		this.evalInputs();
-		this.evalScriptBlocks();
+		var scriptBlocks = this.evalScriptBlocks();
+		this.createHeadersFor(scriptBlocks)
 		this.evalInline();
+	},
+	createHeadersFor : function(scriptBlocks)
+	{
+		scriptBlocks.filter(function(b) { return b.title ? true : false })
+					.forEach(function (b) {
+						this.wrapInPanel(b.parent,b.title,b.isCollapsible,b.id)
+					},LitJS)
 	},
 	evalInputs : function(jq,_doc)
 	{
@@ -44,24 +52,24 @@ var LitJS = {
 			if (id) js.id = id;
 			doc.head.appendChild(js)	
 	},
+	locateScriptBlocks : function(jq)
+	{
+		var $ = jq || jQuery
+		var codeBlocks = $('pre code')
+		return codeBlocks.toArray().map(function(cb) { return new LitCodeBlock(cb); } )
+	},
 	evalScriptBlocks : function(jq,_doc)
 	{
 		var $ = jq || jQuery
 		var doc = _doc || document
 		
-		var codeBlocks = $('pre code')
-		var snippets = []
-		
-		for (var i = 0; i < codeBlocks.length; i++) 
-		{
-			var lcb = new LitCodeBlock(codeBlocks[i])
-			snippets.push(lcb.wrappedCode())
-			if (lcb.title)
-				this.wrapInPanel($(codeBlocks[i].parentElement),lcb.title,lcb.isCollapsible,lcb.id)
-		}
+		var scriptBlocks = this.locateScriptBlocks($);
+		var snippets = scriptBlocks.map(function(b) { return b.wrappedCode(); })
 		
 		if (snippets.length > 0) //actually create and insert the JS element. This also executes the script
 			this.createAndInsertJS(snippets.join("\n"),doc,this.BlocksScriptID)
+		
+		return scriptBlocks;
 	},
 	codeBlockFooter : function()
 	{

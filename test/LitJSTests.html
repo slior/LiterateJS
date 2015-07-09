@@ -15,13 +15,15 @@
   
 	var _ = QUnit;
   
-  
+	function wrapInToArr(arr) { return { toArray : function() { return arr; }}}
+	
 	function mockScript(script,assertionBlock)
 	{
+		
 		return function(selector)
 		{
 			if (assertionBlock) assertionBlock(selector);
-			return script ? [{innerText : script, parentElement: {attributes:{}}}] : [];
+			return wrapInToArr(script ? [{innerText : script, parentElement: {attributes:{}}}] : []);
 		}
 	}
 	
@@ -80,7 +82,7 @@
 			if (typeof(selector) == 'string')
 			{
 				assert.deepEqual(selector,"pre code","Selects 'pre code' elements")
-				return [{innerText : testScript, parentElement : { id:blockID,title : testTitle, attributes : {}}}]
+				return wrapInToArr([{innerText : testScript, parentElement : { id:blockID,title : testTitle, attributes : {}}}])
 			}
 			else //wrapping an object
 			{
@@ -101,6 +103,18 @@
 			}
 		}
 		LitJS.evalScriptBlocks(mockJQ);
+	})
+	
+	_.test("Locating script blocks correctly", function(assert) {
+		var block1 = { parentElement : { title : "block 1", attributes : {} }, innerText : "some code"}
+		var block2 = { parentElement : { title : "block 2", attributes : {},id : "block id" }, innerText : "some more code"}
+		var mockJQ = function(selector) { return wrapInToArr ([ block1,block2 ]) }
+		
+		var res = LitJS.locateScriptBlocks(mockJQ);
+		assert.deepEqual(res.length,2,"Found 2 blocks");
+		assert.deepEqual(res[1].id,block2.parentElement.id,"Second block returned correctly")
+		assert.ok(res[0].constructor == LitCodeBlock && 
+				  res[1].constructor == LitCodeBlock,"Blocks are of correct type")
 	})
 	
 	_.module("Inline Expressions")
