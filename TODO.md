@@ -3,7 +3,7 @@
 (in no particular order)
 
 - Support markdown
-- Reusing/referencing code blocks from other code blocks.
+- ~~Reusing/referencing code blocks from other code blocks.~~
 - Other languages?
 - ~~Expanding/Collapsing code blocks.~~
 - ~~create CSS, at least for the basic "inline"~~
