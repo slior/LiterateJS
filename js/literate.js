@@ -22,11 +22,14 @@ var LitJS = {
 		
 		function _evalInputs()
 		{
-			var snippets = []
-			$('input.lit-value').toArray().forEach(function(inp) {
-				if (inp.id)
-					snippets.push("var " + inp.id + " = " + inp.value + ";")
-			})
+			var snippets = $('input.lit-value').toArray()
+								.filter(function(inp) { return inp.id ? true : false})
+								.map(function(inp) {
+									var value = inp.value;
+									if (inp.type == 'checkbox')
+										value = inp.checked
+									return "var " + inp.id + " = " + value + ";"
+								})
 			
 			if (snippets.length > 0)
 				this.createAndInsertJS(snippets.join("\n"),doc,litJSInputsScriptID)
