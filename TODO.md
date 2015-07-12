@@ -20,3 +20,4 @@
 - Add interaction with other input types
 - add some notion/option for reuse of pages
   - entails some notion of namespaces.
+- adding support for integrating unit tests nicely.
