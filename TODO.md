@@ -16,6 +16,7 @@
 - Add the option to see the imported/used scripts in the file. To (optionally) nicely show references
 - Utility functions
   - Displaying tabular data easily
+  - allow highlighting inputs from the code it is used int
 - Add interaction with other input types
 - add some notion/option for reuse of pages
   - entails some notion of namespaces.
