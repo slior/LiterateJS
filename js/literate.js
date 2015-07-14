@@ -20,9 +20,18 @@ var LitJS = {
 		var doc = _doc || document
 		var litJSInputsScriptID = "litjs-inputs"
 		
-		function _evalInputs()
+		function _decorated(inputs)
 		{
-			var snippets = $('input.lit-value').toArray()
+			inputs.forEach(function(inp){
+				inp.title = inp.id || ""
+			})
+			
+			return inputs;
+		}
+		
+		function _evalInputs(inputs)
+		{
+			var snippets = inputs
 								.filter(function(inp) { return inp.id ? true : false})
 								.map(function(inp) {
 									var value = inp.value;
@@ -35,7 +44,9 @@ var LitJS = {
 				this.createAndInsertJS(snippets.join("\n"),doc,litJSInputsScriptID)
 		}
 		
-		_evalInputs.apply(this)
+		var inputs = $('input.lit-value').toArray();
+		
+		_evalInputs.call(this,_decorated(inputs))
 
 		$('input.lit-value').change(function(inp) { //naive implementation - for every change reevaluate all inputs
 			$("#" + litJSInputsScriptID).remove();
