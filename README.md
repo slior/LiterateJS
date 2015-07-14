@@ -70,6 +70,15 @@ For example:
 
 As previously, you have the option to do it yourself, with different styles/characters.
 
+You also have the option to start the block as collapsed, when the page is loaded. Simply replace 'collapsible' with 'collapsed', like so:
+```
+<pre title="Solution" collapsed>
+<code> ... </code>
+</pre>
+```
+And the annotated block will be collapsed when the page loads. Otherwise, the behavior is like 'collapsible'.
+
+
 ### Error Handling
 If an error is raised in one of the blocks, LiterateJS will raise an error, by default using `windows.alert`.
 It will report the id of the code block. LiterateJS will provide an default if none is provided by you.
@@ -89,6 +98,7 @@ var x = y + 2;
 This is also bound to the inputs' change events, so code blocks will get re-evaluated, and inline code snippets will be updated.
 See the [interactive example](https://github.com/slior/LiterateJS/blob/master/examples/interactive_example.html) for a more complete example.
 
+Also, tooltips, with the given variable name will be added to the inputs marked as lit-value. So the user may hover over specific inputs, and learn their variable names as they appear in code.
 
 ## Dependencies
 
