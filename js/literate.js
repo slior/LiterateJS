@@ -11,7 +11,7 @@ var LitJS = {
 	{
 		scriptBlocks.filter(function(b) { return b.title ? true : false })
 					.forEach(function (b) {
-						this.wrapInPanel(b.parent,b.title,b.isCollapsible,b.id)
+						this.wrapInPanel(b.parent,b.title,b.isCollapsible,b.id,b.isCollapsed)
 					},LitJS)
 	},
 	evalInputs : function(jq,_doc)
@@ -109,14 +109,17 @@ var LitJS = {
 		}
 		
 	},
-	wrapInPanel : function (preElement,title,collapsible,_id)
+	wrapInPanel : function (preElement,title,collapsible,_id,collapsed)
 	{
 		var id = _id || this.generateBlockID()
 
 		preElement.wrap("<div class='panel panel-info'><div class='panel-body' id='" + id + "'></div></div>")
 		var bodyDiv = preElement.parent()
-		var collapseLink = collapsible ? " <a href=\"javascript:$('#" + id + "').toggle(); LitJS.toggleCollapseSymbol($('#" + id + "').parent().children('.panel-heading').children())\">[-]</a>" : ""
+		var toggleSymbol = collapsed ? '+' : '-';
+		var collapseLink = collapsible ? " <a href=\"javascript:$('#" + id + "').toggle(); LitJS.toggleCollapseSymbol($('#" + id + "').parent().children('.panel-heading').children())\">[" + toggleSymbol + "]</a>" : ""
 		bodyDiv.before("<div class='panel-heading'>" + (title||"Code") + collapseLink + "</div>")
+		if (collapsed)
+			$("#" + id).toggle();
 	},
 	toggleCollapseSymbol : function(el)
 	{
@@ -130,7 +133,8 @@ var LitJS = {
 function LitCodeBlock(htmlCodeNode)
 {
 	this.title = htmlCodeNode.parentElement.title
-	this.isCollapsible = typeof (htmlCodeNode.parentElement.attributes["collapsible"]) != "undefined"
+	this.isCollapsed = typeof (htmlCodeNode.parentElement.attributes["collapsed"]) != "undefined"
+	this.isCollapsible = this.isCollapsed || (typeof (htmlCodeNode.parentElement.attributes["collapsible"]) != "undefined")
 	this.code = htmlCodeNode.innerText
 	this.parent = $(htmlCodeNode.parentElement)
 	this.id = htmlCodeNode.parentElement.id || LitJS.generateBlockID()
