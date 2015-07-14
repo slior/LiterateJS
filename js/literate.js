@@ -50,7 +50,7 @@ var LitJS = {
 
 		$('input.lit-value').change(function(inp) { //naive implementation - for every change reevaluate all inputs
 			$("#" + litJSInputsScriptID).remove();
-			_evalInputs.apply(LitJS)
+			_evalInputs.call(LitJS,_decorated(inputs))
 			
 			$("#" + LitJS.BlocksScriptID).remove();
 			LitJS.evalScriptBlocks();
