@@ -52,6 +52,14 @@
 					$("#" + id).toggle();
 			}
 		})
+		
+		LitJS.extendWith({
+			blockErrorHandler : function(blockID)
+			{
+				return "alert('[" + blockID + "] : ' + exn);" 
+			}
+		})
+		
 		LitJS.eval();
 	}
 	
@@ -106,6 +114,25 @@ Each hook's signature may be different.
 The rest of the code works otherwise the same way.<br/>
 In this example, we can calculate <code>fib(5) = </code><code class="inline">fib(5)</code>
 </p>
-
+<hr />
+<p>
+Another possible extension is to have a different error handling code.<br/>
+So given this extensions:
+</p>
+<pre litjs-ignore><code>
+LitJS.extendWith({
+	blockErrorHandler : function(blockID)
+	{
+		return "alert('['" + blockID + "'] : ' + exn);" 
+	}
+})
+</code></pre>
+<p>
+We should see, when the page loads, a different error message (compared to the <a href="error_example.html">default</a>), when evaluating:
+</p>
+<pre><code>
+var x = 2 + 1
+var y = x();
+</code></pre>
 </body>
 </html>
