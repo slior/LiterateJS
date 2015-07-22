@@ -8,7 +8,6 @@
 - ~~Expanding/Collapsing code blocks.~~
 - ~~create CSS, at least for the basic "inline"~~
 - supporting re-evaluation of blocks, on demand
-- supporting hidden code blocks (with "hide" class?)
 - ~~support named code blocks, showing names in the document~~
 - decouple the styles from the code using them
 - ~~reporting errors in literate code block properly~~
