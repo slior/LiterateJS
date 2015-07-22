@@ -69,7 +69,8 @@ var LitJS = {
 	locateScriptBlocks : function(jq)
 	{
 		var $ = jq || jQuery
-		var codeBlocks = $('pre code')
+		var relevantPreNodes = $('pre').not('[litjs-ignore]')
+		var codeBlocks = relevantPreNodes.children('code');
 		return codeBlocks.toArray().map(function(cb) { return new LitCodeBlock(cb); } )
 	},
 	evalScriptBlocks : function(jq,_doc)
@@ -111,8 +112,49 @@ var LitJS = {
 	},
 	wrapInPanel : function (preElement,title,collapsible,_id,collapsed)
 	{
-		var id = _id || this.generateBlockID()
+		if (!_id) throw "Can't wrap in panel: missing block ID";
+		var id = _id
 
+		var panelExtension = this.extensions.singleForHook("panelWrap");
+		panelExtension.call(this,preElement,title,collapsible,id,collapsed)
+		
+	},
+	toggleCollapseSymbol : function(el)
+	{
+		el.text(el.text() == '[-]' ? '[+]' : '[-]')
+	},
+	generateBlockID : function() { return "block_" + (LitJS.lastID++); },
+	lastID : 0,
+	
+	extendWith : function(extension)
+	{
+		if (!extension) throw "Invalid extension"
+		this.extensions.add(extension)
+	},
+	
+	extensions : {
+		exts : [],
+		add : function(extension)
+		{
+			this.exts.push(extension)
+		},
+		singleForHook : function(hookID)
+		{
+			var matched = this.exts.filter(function(ext) { return typeof(ext[hookID]) != "undefined"})
+			if (matched.length == 0)
+				throw "No extension found for " + hookID;
+			else
+				return (matched.pop())[hookID] || null
+		}
+		
+	}
+	
+}
+
+//// Default Behavior (extension)
+LitJS.extendWith({
+	panelWrap : function(preElement,title,collapsible,id,collapsed)
+	{
 		preElement.wrap("<div class='panel panel-info'><div class='panel-body' id='" + id + "'></div></div>")
 		var bodyDiv = preElement.parent()
 		var toggleSymbol = collapsed ? '+' : '-';
@@ -120,15 +162,10 @@ var LitJS = {
 		bodyDiv.before("<div class='panel-heading'>" + (title||"Code") + collapseLink + "</div>")
 		if (collapsed)
 			$("#" + id).toggle();
-	},
-	toggleCollapseSymbol : function(el)
-	{
-		el.text(el.text() == '[-]' ? '[+]' : '[-]')
-	},
-	generateBlockID : function() { return "block_" + (LitJS.lastID++); },
-	lastID : 0
-}
+	}
+})
 
+//// Definition of LitCodeBlock
 
 function LitCodeBlock(htmlCodeNode)
 {

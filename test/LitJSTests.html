@@ -15,7 +15,17 @@
   
 	var _ = QUnit;
   
-	function wrapInToArr(arr) { return { toArray : function() { return arr; }}}
+	function wrapInToArr(arr) { 
+		return { 
+			not : function(selector) { 
+					return {
+						children : function(selector) {
+									return { toArray : function() { return arr} }
+						}
+					}; 
+				}
+		}
+	}
 	
 	function mockScript(script,assertionBlock)
 	{
@@ -23,7 +33,12 @@
 		return function(selector)
 		{
 			if (assertionBlock) assertionBlock(selector);
-			return wrapInToArr(script ? [{innerText : script, parentElement: {attributes:{}}}] : []);
+			return wrapInToArr(script ? 
+								[{	innerText : script, 
+									parentElement: {attributes:{}}
+								}] 
+								: []
+							);
 		}
 	}
 	
@@ -34,7 +49,7 @@
 		var testScript = "var x = 5"
 		var expectedScript = "try {\n" + testScript + "\n}\ncatch (exn) {\nalert('Error in block block_0: ' + exn);\n}";
 		var mockJQ = mockScript(testScript,
-						function(selector) { assert.deepEqual(selector,'pre code', "Looks for 'pre code' elements"); })
+						function(selector) { assert.deepEqual(selector,'pre', "Looks for 'pre' elements"); })
 		
 		var mockDoc = 
 		{
@@ -81,7 +96,7 @@
 		{
 			if (typeof(selector) == 'string')
 			{
-				assert.deepEqual(selector,"pre code","Selects 'pre code' elements")
+				assert.deepEqual(selector,"pre","Selects 'pre' elements")
 				return wrapInToArr([{innerText : testScript, parentElement : { id:blockID,title : testTitle, attributes : {}}}])
 			}
 			else //wrapping an object

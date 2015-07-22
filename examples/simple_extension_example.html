@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Extension Example</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/LitJS.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+
+	<script type="text/javascript" src="../js/literate.js"></script>
+	
+	<style>
+	
+	body {
+		padding-left:10px
+	}
+	
+	p {
+		text-align:justify
+	}
+	
+	blockquote {
+		font-size : 90%;
+	}
+	
+	</style>
+	
+    <script type="text/javascript">
+	
+	function toggle(el)
+	{
+		el.text(el.text() == '-' ? '+' : '-')
+	}
+	
+	hljs.initHighlightingOnLoad();
+	
+	function pageLoaded()
+	{
+		LitJS.extendWith({
+			panelWrap : function(preElement,title,collapsible,id,collapsed)
+			{
+				preElement.wrap("<div class='panel panel-primary'><div class='panel-body' id='" + id + "'></div></div>")
+				var bodyDiv = preElement.parent()
+				var toggleSymbol = collapsed ? '+' : '-';
+				var collapseLink = collapsible ? " <a href=\"javascript:$('#" + id + "').toggle(); LitJS.toggleCollapseSymbol($('#" + id + "').parent().children('.panel-heading').children())\">[" + toggleSymbol + "]</a>" : ""
+				bodyDiv.before("<div class='panel-heading'>" + (title||"Code") + collapseLink + "</div>")
+				if (collapsed)
+					$("#" + id).toggle();
+			}
+		})
+		LitJS.eval();
+	}
+	
+	</script>
+</head>
+<body onload="pageLoaded()">
+
+<h2>Defining a Simple Example</h2>
+
+<p>
+A simple extension example would be to change the styling of panels. One can define a simple extension that wraps the code blocks in a different fashion. <br/>
+For example, using a different color for wrapping code panels:
+</p>
+
+<pre title="Simple Fibonacci"><code>
+function fib(n)
+{
+	if (n < 0) return 0
+	if (n == 0)  return 1
+	if (n == 1)  return 1
+	return fib(n-1) + fib(n-2)
+}
+</code></pre>
+<p>
+This is achieved by extending the LitJS object before calling eval on it, like so:
+</p>
+<pre litjs-ignore><code>
+LitJS.extendWith({
+	panelWrap : function(preElement,title,collapsible,id,collapsed)
+	{
+		preElement.wrap("&lt;div class='panel panel-primary'&gt;&lt;div class='panel-body' id='" + id + "'&gt;&lt;/div&gt;&lt;/div&gt;")
+		var bodyDiv = preElement.parent()
+		var toggleSymbol = collapsed ? '+' : '-';
+		var collapseLink = collapsible ? " &lt;a href=\"javascript:$('#" + id + "').toggle(); LitJS.toggleCollapseSymbol($('#" + id + "').parent().children('.panel-heading').children())\"&gt;[" + toggleSymbol + "]&lt;/a&gt;" : ""
+		bodyDiv.before("&lt;div class='panel-heading'&gt;" + (title||"Code") + collapseLink + "&lt;/div&gt;")
+		if (collapsed)
+			$("#" + id).toggle();
+	}
+})
+</code></pre>
+<p>
+(this block, by the way, demonstrates another feature - ignoring nodes marked with <code>litjs-ignore</code>))
+</p>
+
+<p>
+The object passed to <code>extendWith</code> should have function members named after the hook names as expected by LitJS.<br/>
+In the example here, the 'panelWrap' hook is supplied.<br/>
+Each hook's signature may be different.
+</p>
+
+<p>
+The rest of the code works otherwise the same way.<br/>
+In this example, we can calculate <code>fib(5) = </code><code class="inline">fib(5)</code>
+</p>
+
+</body>
+</html>
