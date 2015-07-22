@@ -162,7 +162,11 @@ LitJS.extendWith({
 		bodyDiv.before("<div class='panel-heading'>" + (title||"Code") + collapseLink + "</div>")
 		if (collapsed)
 			$("#" + id).toggle();
+	},
+	blockErrorHandler : function(blockID) {
+		return "alert('Error in block " + blockID + ": ' + exn);"
 	}
+	
 })
 
 //// Definition of LitCodeBlock
@@ -186,12 +190,18 @@ function LitCodeBlock(htmlCodeNode)
 	
 	this.wrappedCode = function()
 	{
+		
+		function resolveErrorHandlingCode(_id)
+		{
+			return LitJS.extensions.singleForHook("blockErrorHandler").call(this,_id)
+		}
+		
 		var ret = []
 		ret.push("try {")
 			ret.push(this.code)
 		ret.push("}")
 		ret.push("catch (exn) {")
-			ret.push("alert('Error in block " + this.id + ": ' + exn);")
+			ret.push(resolveErrorHandlingCode(this.id))
 		ret.push("}")
 		
 		return ret.join("\n")
