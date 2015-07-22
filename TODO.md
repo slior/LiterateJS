@@ -20,3 +20,4 @@
 - add some notion/option for reuse of pages
   - entails some notion of namespaces.
 - adding support for integrating unit tests nicely.
+- Document extension points

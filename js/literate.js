@@ -132,12 +132,19 @@ var LitJS = {
 		this.extensions.add(extension)
 	},
 	
+	// Object handling all extensions to LitJS
 	extensions : {
-		exts : [],
+		exts : [], //the set of extension objects registered
+		//Add the given extension object.
 		add : function(extension)
 		{
 			this.exts.push(extension)
 		},
+		
+		/*
+			Given a hook ID, return the last extension registered that is registered to this hook.
+			If no such extension is found an error is thrown.
+		*/
 		singleForHook : function(hookID)
 		{
 			var matched = this.exts.filter(function(ext) { return typeof(ext[hookID]) != "undefined"})
