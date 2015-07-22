@@ -81,7 +81,7 @@ And the annotated block will be collapsed when the page loads. Otherwise, the be
 
 ### Error Handling
 If an error is raised in one of the blocks, LiterateJS will raise an error, by default using `windows.alert`.
-It will report the id of the code block. LiterateJS will provide an default if none is provided by you.
+It will report the id of the code block. LiterateJS will provide a default id if none is provided by you.
 For an example of this, refer to the [error example](https://github.com/slior/LiterateJS/blob/master/examples/error_example.html).
 
 ### Interactive Literate Blocks
@@ -99,6 +99,18 @@ This is also bound to the inputs' change events, so code blocks will get re-eval
 See the [interactive example](https://github.com/slior/LiterateJS/blob/master/examples/interactive_example.html) for a more complete example.
 
 Also, tooltips, with the given variable name will be added to the inputs marked as lit-value. So the user may hover over specific inputs, and learn their variable names as they appear in code.
+
+### Ignoring Specific PRE CODE Element
+As a rule, LitJS searches for `code` elements within `pre` elements, and evaluates them.
+In case you want to have such an element, but not have it evaluated by LitJS, simply add the `litjs-ignore` attribute to the `pre` element.
+For example:
+```
+<pre litjs-ignore>
+<code> ... </code>
+</pre>
+```
+
+This element will be simply ignored by LitJS - it won't be evaluated, nor any other treatment, e.g. adding headers, will be added to it.
 
 ## Dependencies
 
