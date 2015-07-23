@@ -109,6 +109,33 @@ var LitJS = {
 			inlineBlock.code = codeToEval;
 		}
 		
+		var inlineObjs = $('code.litjs-inline-obj')
+		inlineObjs.toArray().forEach(function(codeEl) {
+			var code = codeEl.code || codeEl.innerText;
+			var objResult = eval(code)
+			if (typeof(objResult) != "object")
+				return ""
+			else
+			{
+				codeEl.innerText = this.extensions.singleForHook("inlineObjRender").call(this,objResult)
+				codeEl.code = code;
+			}
+		},this)
+		
+		var inlineTables = $('code.litjs-inline-table')
+		inlineTables.toArray().forEach(function(codeEl) {
+			var code = codeEl.code || codeEl.innerText;
+			var tblResult = eval(code)
+			if (typeof(tblResult) != "object")
+				return ""
+			else
+			{
+				var jqEl = $(codeEl)
+				jqEl.before(this.extensions.singleForHook("inlineTblRender").call(this,tblResult))
+				jqEl.addClass("hidden")
+				codeEl.code = code;
+			}
+		},this)
 	},
 	wrapInPanel : function (preElement,title,collapsible,_id,collapsed)
 	{
@@ -172,6 +199,31 @@ LitJS.extendWith({
 	},
 	blockErrorHandler : function(blockID) {
 		return "alert('Error in block " + blockID + ": ' + exn);"
+	},
+	inlineObjRender : function(obj) {
+		return JSON.stringify(obj);
+	},
+	inlineTblRender : function(tbl) {
+		if (!tbl || !(typeof tbl != "array") || tbl.length == 0)
+			return ""
+		var keys = Object.keys(tbl[0])
+		var h = []
+		h.push('<table class="table">')
+			h.push('<thead>')
+				h.push('<tr>')
+					keys.forEach(function(k){ h.push ('<td>' + JSON.stringify(k) + '</td>')})
+				h.push('</tr>')
+			h.push('</thead>')
+			h.push('<tbody>')
+				tbl.forEach(function(row) {
+					h.push('<tr>')
+						keys.forEach(function(k){ h.push ('<td>' + row[k] + '</td>')})
+					h.push('</tr>')
+				})
+			h.push('</tbody>')
+		h.push('</table>')
+		return h.join("");
+		
 	}
 	
 })

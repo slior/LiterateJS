@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Displaying Results Example</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/LitJS.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+
+	<script type="text/javascript" src="../js/literate.js"></script>
+	
+	<style>
+	
+	body {
+		padding-left:10px
+	}
+	
+	p {
+		text-align:justify
+	}
+	
+	blockquote {
+		font-size : 90%;
+	}
+	
+	</style>
+	
+    <script type="text/javascript">
+	
+	function toggle(el)
+	{
+		el.text(el.text() == '-' ? '+' : '-')
+	}
+	
+	hljs.initHighlightingOnLoad();
+	
+	function pageLoaded()
+	{
+		LitJS.extendWith({
+			blockErrorHandler : function(blockID)
+			{
+				return "alert('[" + blockID + "] : ' + exn);" 
+			}
+		})
+		
+		LitJS.eval();
+	}
+	
+	</script>
+</head>
+<body onload="pageLoaded()">
+
+<h2>Displaying Different Forms of Output</h2>
+
+<p>
+Other examples have shown how we can show inline calculations.<br/>
+For example, given the following definition
+</p>
+
+<pre><code>
+function fib(n)
+{
+	if (n < 0) return 0
+	if (n == 0)  return 1
+	if (n == 1)  return 1
+	return fib(n-1) + fib(n-2)
+}
+</code></pre>
+<p>
+We can easily show the result of <code>fib(8)</code> to be <code class="inline">fib(8)</code>.
+</p>
+
+<p>
+An array is also easily shown, using Javascript native conversion to string<br/>
+So for example, given the array <code>fibResults</code>:
+</p>
+<pre><code>
+var fibResults = []
+for (var i = 0; i < 10; i++) fibResults.push(fib(i))
+</code></pre>
+<p>
+We can show it using any kind of a javascript expression.<br/>
+Natively: <code class="inline">fibResults</code><br/>
+or maybe with a different delimiter, using <code>Array.join</code>: <code class="inline">fibResults.join(";")</code>
+</p>
+<p>
+But what if we have an object representing some data we want displayed?<br/>
+For example:
+</p>
+<pre><code>
+var point2D = { x : 5, y : 2 }
+</code></pre>
+
+<p>How will that render?</p>
+<p>
+Natively, it would render as: <code class="inline">point2D</code>.<br/>
+But LitJS does provide some helper methods.<br/>
+If the designated code element class is <code>litjs-inline-obj</code>, it would be rendered using the <code>inlineObjRender</code> extension (which also has a default behavior):
+<code class="litjs-inline-obj">point2D</code>.
+</p>
+<p>
+Similarly, say we have an array of objects, effectively a table, like so:
+</p>
+<pre><code>
+var sqrs = []
+for (var i = -5; i <= 5; i++)
+	sqrs.push({x : i, y : (i*i)})
+</code></pre>
+And say we want to display it as a table of data. We can do it with the <code>litjs-inline-table</code> class:<br/>
+<code class="litjs-inline-table">sqrs</code>
+<p>
+Note that this will render a table, and hide the &lt;code&gt; element.<br/>
+The default implementation draws a simple table (with a class called "table"), using the first element of the resulting array (the table), to determine the keys.<br/>
+An extension may be installed to change the rendering, or supply a different set of keys.
+</p>
+</body>
+</html>
