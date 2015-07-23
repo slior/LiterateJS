@@ -99,43 +99,35 @@ var LitJS = {
 	evalInline : function(jq)
 	{
 		var $ = jq || jQuery
-		var inlines = $('code.inline')
 		
-		for (var i = 0, l = inlines.length; i < l; i++)
+		function evaluateAndRender(inlineClass,renderFunc,thiz)
 		{
-			var inlineBlock = inlines[i]
-			var codeToEval = inlineBlock.code || inlineBlock.innerText
-			inlineBlock.innerText = eval(codeToEval)
-			inlineBlock.code = codeToEval;
+			var inlines = $('code.' + inlineClass)
+			inlines.toArray().forEach(function(codeEl) {
+				var __code = codeEl.code || codeEl.innerText;
+				var __result = eval(__code)
+				if (typeof __result == "undefined") throw "Undefined evaluation result ==> can't render"
+				renderFunc.call(this,codeEl,__result)
+				codeEl.code = __code;
+			},thiz)
 		}
 		
-		var inlineObjs = $('code.litjs-inline-obj')
-		inlineObjs.toArray().forEach(function(codeEl) {
-			var code = codeEl.code || codeEl.innerText;
-			var objResult = eval(code)
-			if (typeof(objResult) != "object")
-				return ""
-			else
-			{
-				codeEl.innerText = this.extensions.singleForHook("inlineObjRender").call(this,objResult)
-				codeEl.code = code;
-			}
+		evaluateAndRender('inline',function(codeEl,result) {
+			codeEl.innerText = result;
 		},this)
 		
-		var inlineTables = $('code.litjs-inline-table')
-		inlineTables.toArray().forEach(function(codeEl) {
-			var code = codeEl.code || codeEl.innerText;
-			var tblResult = eval(code)
-			if (typeof(tblResult) != "object")
-				return ""
-			else
-			{
-				var jqEl = $(codeEl)
-				jqEl.before(this.extensions.singleForHook("inlineTblRender").call(this,tblResult))
-				jqEl.addClass("hidden")
-				codeEl.code = code;
-			}
-		},this)
+		evaluateAndRender('litjs-inline-obj',function(codeEl,result) {
+			codeEl.innerText = this.extensions.singleForHook("inlineObjRender").call(this,result)
+		}, this)
+		
+		evaluateAndRender('litjs-inline-table',function(codeEl,result) {
+			if (typeof(result) != "object" || !(result.length))
+				throw "Can't render a non-array as a table"
+			var jqEl = $(codeEl)
+			jqEl.before(this.extensions.singleForHook("inlineTblRender").call(this,result))
+			jqEl.addClass("hidden")
+		}, this)
+		
 	},
 	wrapInPanel : function (preElement,title,collapsible,_id,collapsed)
 	{

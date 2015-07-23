@@ -137,13 +137,14 @@
 		assert.expect(4)
 		var testScript = "Math.sqrt(16)";
 
-		var mockExprEl = {innerText : testScript}
+		var mockExprEl = {innerText : testScript,length : 0}
 		var mockJQ = function(selector)
 		{
 			assert.ok(selector == 'code.inline' ||
 					  selector == 'code.litjs-inline-obj' ||
 					  selector == 'code.litjs-inline-table', "Looks for the inline code elements by correct classes");
-			var ret = [mockExprEl];
+			
+			var ret = selector == 'code.inline' ? [mockExprEl] : [];
 			ret.toArray = function() { return ret; }
 			return ret;
 		}
