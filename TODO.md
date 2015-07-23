@@ -21,3 +21,5 @@
   - entails some notion of namespaces.
 - adding support for integrating unit tests nicely.
 - Document extension points
+- for extensions: add the option to fallback to previous/default behavior
+- extensions: specify a specific extension for a specific element (e.g. drawing results)
