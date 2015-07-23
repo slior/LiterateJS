@@ -134,14 +134,18 @@
 	
 	_.module("Inline Expressions")
 	_.test("Flow of inline script evaluation", function(assert){
-		assert.expect(2)
+		assert.expect(4)
 		var testScript = "Math.sqrt(16)";
 
 		var mockExprEl = {innerText : testScript}
 		var mockJQ = function(selector)
 		{
-			assert.deepEqual(selector,'code.inline', "Looks for 'code.inline' elements");
-			return [mockExprEl];
+			assert.ok(selector == 'code.inline' ||
+					  selector == 'code.litjs-inline-obj' ||
+					  selector == 'code.litjs-inline-table', "Looks for the inline code elements by correct classes");
+			var ret = [mockExprEl];
+			ret.toArray = function() { return ret; }
+			return ret;
 		}
 		
 		LitJS.evalInline(mockJQ);
