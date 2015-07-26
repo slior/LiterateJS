@@ -167,10 +167,11 @@ var LitJS = {
 		singleForHook : function(hookID)
 		{
 			var matched = this.exts.filter(function(ext) { return typeof(ext[hookID]) != "undefined"})
-			if (matched.length == 0)
+			if (matched.length <= 0)
 				throw "No extension found for " + hookID;
 			else
-				return (matched.pop())[hookID] || null
+				//return (matched.pop())[hookID] || null
+			return (matched[matched.length-1])[hookID] || null
 		}
 		
 	}
