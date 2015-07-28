@@ -25,3 +25,4 @@
 - extensions: 
   - specify a specific extension for a specific element (e.g. drawing results)
   - hook for before/after block execution
+- tooltips for inline block should show the code used for calculating it.
