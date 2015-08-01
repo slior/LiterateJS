@@ -69,7 +69,7 @@ var LitJS = {
 	locateScriptBlocks : function(jq)
 	{
 		var $ = jq || jQuery
-		var relevantPreNodes = $('pre').not('[litjs-ignore]')
+		var relevantPreNodes = $('pre').not('.litjs-ignore')
 		var codeBlocks = relevantPreNodes.children('code');
 		return codeBlocks.toArray().map(function(cb) { return new LitCodeBlock(cb); } )
 	},
@@ -117,14 +117,14 @@ var LitJS = {
 		},this)
 		
 		evaluateAndRender('litjs-inline-obj',function(codeEl,result) {
-			codeEl.innerText = this.extensions.singleForHook("inlineObjRender").call(this,result)
+			codeEl.innerText = this.extensions.singleForHook("inlineObjRender",codeEl).call(this,result)
 		}, this)
 		
 		evaluateAndRender('litjs-inline-table',function(codeEl,result) {
 			if (typeof(result) != "object" || !(result.length))
 				throw "Can't render a non-array as a table"
 			var jqEl = $(codeEl)
-			jqEl.before(this.extensions.singleForHook("inlineTblRender").call(this,result))
+			jqEl.before(this.extensions.singleForHook("inlineTblRender",codeEl).call(this,result,codeEl))
 			jqEl.addClass("hidden")
 		}, this)
 		
@@ -134,7 +134,7 @@ var LitJS = {
 		if (!_id) throw "Can't wrap in panel: missing block ID";
 		var id = _id
 
-		var panelExtension = this.extensions.singleForHook("panelWrap");
+		var panelExtension = this.extensions.singleForHook("panelWrap",preElement);
 		panelExtension.call(this,preElement,title,collapsible,id,collapsed)
 		
 	},
@@ -151,27 +151,46 @@ var LitJS = {
 		this.extensions.add(extension)
 	},
 	
+	extendConditionally : function(extension,condition)
+	{
+		if (!extension) throw "Invalid extension"
+		condition = condition || function() { return true; }
+		this.extensions.addConditionally(extension,condition);
+	},
+	
 	// Object handling all extensions to LitJS
 	extensions : {
 		exts : [], //the set of extension objects registered
 		//Add the given extension object.
 		add : function(extension)
 		{
-			this.exts.push(extension)
+			//this.exts.push(extension)
+			this.addConditionally(extension, function(hook,el) { return true; })
+		},
+		
+		addConditionally : function(extension,condition)
+		{
+			this.exts.push({condition : condition, extension : extension})
 		},
 		
 		/*
 			Given a hook ID, return the last extension registered that is registered to this hook.
 			If no such extension is found an error is thrown.
 		*/
-		singleForHook : function(hookID)
+		singleForHook : function(hookID,el)
 		{
-			var matched = this.exts.filter(function(ext) { return typeof(ext[hookID]) != "undefined"})
+			var matched = this.exts.filter(function(entry) { 
+				var ext = entry.extension;
+				var cond = entry.condition;
+				
+				return cond.call(this,hookID,el) && typeof(ext[hookID]) != "undefined"
+			})
 			if (matched.length <= 0)
 				throw "No extension found for " + hookID;
 			else
 				//return (matched.pop())[hookID] || null
-			return (matched[matched.length-1])[hookID] || null
+				//return (matched[matched.length-1])[hookID] || null
+				return (matched[matched.length-1]).extension[hookID] || null
 		}
 		
 	}
@@ -196,7 +215,7 @@ LitJS.extendWith({
 	inlineObjRender : function(obj) {
 		return JSON.stringify(obj);
 	},
-	inlineTblRender : function(tbl) {
+	inlineTblRender : function(tbl,codeEl) {
 		if (!tbl || !(typeof tbl != "array") || tbl.length == 0)
 			return ""
 		var keys = Object.keys(tbl[0])

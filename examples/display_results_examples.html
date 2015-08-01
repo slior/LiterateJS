@@ -12,6 +12,7 @@
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
 
 	<script type="text/javascript" src="../js/literate.js"></script>
+	<script src="Chart.min.js"></script>
 	
 	<style>
 	
@@ -40,6 +41,33 @@
 	
 	function pageLoaded()
 	{
+	
+	
+		LitJS.extendConditionally({
+			inlineTblRender : function(_data,codeEl) {
+				var extract = function(tbl,key) { return tbl.map(function( row ) { return row[key]; })}
+				var d = {
+					labels : extract(_data,"x"),
+					datasets : [
+						{ 	
+							strokeColor: "blue",
+							data : extract(_data,"y")
+						}
+					]
+				}
+				
+				var canvasID = (codeEl.id || '') + '_chart';
+				$(codeEl).before('<canvas id="' + canvasID + '" width="600" height="400"></canvas>')
+				var script = document.createElement('script')
+				script.text = 'new Chart($("#' + canvasID + '")[0].getContext("2d")).Line(' + JSON.stringify(d) + ',{datasetFill:false})'
+				document.head.appendChild(script);
+
+				return '';
+			}
+		},
+		function (hook,el) { return $(el).attr('method') == 'chart'})
+
+	
 		LitJS.extendWith({
 			blockErrorHandler : function(blockID)
 			{
@@ -115,7 +143,74 @@ And say we want to display it as a table of data. We can do it with the <code>li
 <p>
 Note that this will render a table, and hide the &lt;code&gt; element.<br/>
 The default implementation draws a simple table (with a class called "table"), using the first element of the resulting array (the table), to determine the header from the keys.<br/>
-An extension may be installed to change the rendering, or supply a different set of headers for the resulting table.
+An extension may be installed to change the rendering, or supply a different set of headers for the resulting table, or just draw a chart of it.<br/>
+
 </p>
+<p>
+For example, the following snippet will install an extension that renders the previous <code>sqrs</code> data as a line chart:
+</p>
+<pre class="litjs-ignore"><code>
+LitJS.extendConditionally({
+	inlineTblRender : function(_data,codeEl) {
+		var extract = function(tbl,key) { return tbl.map(function( row ) { return row[key]; })}
+		var d = {
+			labels : extract(_data,"x"),
+			datasets : [{ 	
+				strokeColor: "blue",
+				data : extract(_data,"y")
+			}]
+		}
+		
+		var canvasID = (codeEl.id || '') + '_chart';
+		$(codeEl).before('&lt;canvas id="' + canvasID + '" width="600" height="400"&gt;&lt;/canvas&gt;')
+		var script = document.createElement('script')
+		script.text = 'new Chart($("#' + canvasID + '")[0].getContext("2d")).Line(' + JSON.stringify(d) + ',{datasetFill:false})'
+		document.head.appendChild(script);
+
+		return '';
+	}
+},
+function (hook,el) { return $(el).attr('method') == 'chart'})
+</code></pre>
+
+<p>and given an inline code snippet with the correct hook id ('<code>inlineTblRender</code>') and a <code>method</code> attribute with the value of <code>chart</code>:</p>
+<pre class="litjs-ignore"><code>
+&lt;code class="litjs-inline-table" method="chart" id="sqrs"&gt;sqrs&lt;code&gt;
+</code></pre>
+
+<p>
+We should end up with a chart instead of a table:
+</p>
+<code class="litjs-inline-table" method="chart" id="sqrs">sqrs</code>
+
+<p>
+Note:
+	<ul>
+		<li>This example extension relies on <a href="http://www.chartjs.org/">Chart.js</a>, which is imported independently into this page.</li>
+		<li>The rendering function takes care of adding any other elements, e.g. the necessary canvas and script element that does the actual rendering</li>
+		<li>In this case, since the rendering function already changes the document (i.e. it's mutating the document on its own), it returns nothing as the result HTML for 'inlineTblRender' - so LitJS doesn't change the document</li>
+		<li>When installing the extension, we already provide a filter on the elements it will work on - using the 'method' attribute. 
+			This attribute is arbitrary, and used only in the condition function supplied to <code>extendConditionally</code>.
+			You could use any other method to filter the elements this extension applies to.
+		</li>
+	</ul>
+</p>
+<hr/>
+<p>
+As another demonstration of this, let's render the fibonacci result from earlier (<code>fibResults</code>) using our new chart extension.<br/>
+We would first need to massage the data a bit, to transform it into the expected format by the extension ('x' and 'y' keys:)
+<pre><code>
+var x = 0;
+var fibResultsForChart = fibResults.map(function(y) { return {"x" : (x++), "y" : y} })
+</code></pre>
+And then we can render it using:
+<pre class="litjs-ignore"><code>
+&lt;code class="litjs-inline-table" method="chart" id="fibRes"&gt;fibResultsForChart&lt;code&gt;
+</code></pre>
+Like so:
+</p>
+<code class="litjs-inline-table" method="chart" id="fibRes">fibResultsForChart</code>
+
+
 </body>
 </html>
