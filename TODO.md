@@ -23,7 +23,7 @@
 - Document extension points
 - for extensions: add the option to fallback to previous/default behavior
 - extensions: 
-  - specify a specific extension for a specific element (e.g. drawing results)
+  - ~~specify a specific extension for a specific element (e.g. drawing results)~~
   - hook for before/after block execution
 - allow true out-of-order execution. code blocks should be able to easily reference other code blocks.
 - tooltips for inline block should show the code used for calculating it.
