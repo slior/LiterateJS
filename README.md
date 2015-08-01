@@ -115,3 +115,5 @@ This element will be simply ignored by LitJS - it won't be evaluated, nor any ot
 ## Dependencies
 
 The code depends on JQuery. Other than that, the example uses Bootstrap and Highlight.JS, but the literate programming doesn't rely on that.
+Some examples use other libraries, the rights to those libraries the property of their respective owners, as designated by their respective licenses.
+
