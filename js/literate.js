@@ -105,6 +105,7 @@ var LitJS = {
 			var inlines = $('code.' + inlineClass)
 			inlines.toArray().forEach(function(codeEl) {
 				var __code = codeEl.code || codeEl.innerText;
+				codeEl.title = __code;
 				var __result = eval(__code)
 				if (typeof __result == "undefined") throw "Undefined evaluation result ==> can't render"
 				renderFunc.call(this,codeEl,__result)
