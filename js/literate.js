@@ -91,16 +91,6 @@ var LitJS = {
 		
 		return scriptBlocks;
 	},
-
-	codeBlockFooter : function()
-	{
-		return "}\n" + this.BlocksFunctionName + "();"
-	},
-	codeBlockHeader : function()
-	{
-		return "function " + this.BlocksFunctionName + "() {"
-	},
-	BlocksFunctionName : "LIT_CODE",
 	BlocksScriptID : "litjs-block",
 	evalInline : function(jq)
 	{
@@ -259,14 +249,6 @@ function LitCodeBlock(htmlCodeNode)
 	this.parent = $(htmlCodeNode.parentElement)
 	this.id = htmlCodeNode.parentElement.id || LitJS.generateBlockID()
 	this.embedded = false;  //by default, a code block is not embedded.
-	this.insertJSTo = function (doc)
-	{
-		var js = doc.createElement('script');
-		js.type = "text/javascript"
-		
-		js.text = this.code
-		doc.head.appendChild(js);
-	}
 	
 	this.wrappedCode = function()
 	{
