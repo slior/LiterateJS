@@ -112,6 +112,11 @@ For example:
 
 This element will be simply ignored by LitJS - it won't be evaluated, nor any other treatment, e.g. adding headers, will be added to it.
 
+### Embedding Code Blocks
+It is possible to embed the content of one code block into another one, resulting in a larger code block.
+This allows for breaking the code into more understandable pieces, separating concepts, etc. It allows to structure the document more freely, not being restricted by the embedded language (javascript) scope definition rules.
+For a more complete overview and discussion, see the [cross reference example](https://github.com/slior/LiterateJS/blob/master/examples/cross_reference_example.html)
+
 ## Dependencies
 
 The code depends on JQuery. Other than that, the example uses Bootstrap and Highlight.JS, but the literate programming doesn't rely on that.

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cross Referencing Example</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/LitJS.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+
+	<script type="text/javascript" src="../js/literate.js"></script>
+	
+	<style>
+	
+	body {
+		padding-left:10px
+	}
+	
+	p {
+		text-align:justify
+	}
+	
+	blockquote {
+		font-size : 90%;
+	}
+	
+	</style>
+	<script type="text/javascript">
+	
+	
+	hljs.initHighlightingOnLoad();
+	
+	function pageLoaded()
+	{
+		LitJS.eval();
+	}
+	
+	</script>
+</head>
+<body onload="pageLoaded()">
+
+<h2>Cross Referencing Code Blocks</h2>
+<p>
+Normally, referencing code in another block is not a problem.<br/>
+For example, the code is this block:
+<pre id="fact_def"><code>
+function factorial(n)
+{
+	return n <= 1 ? 1 : factorial(n-1) * n;
+}
+</code></pre>
+Can be called from this one:
+<pre id="fact_use"><code>
+
+var sampleFactorials = [1,2,3,4,5,6,7,8].map(function(x) { return {x : x, fact : factorial(x)}})
+
+</code></pre>
+Giving us: <code class="litjs-inline-table">sampleFactorials</code>
+</p>
+<p>
+But what if the function we're referencing appears later in the document, e.g. <a href="#cube_def">cube_def</a>.<br/>
+We should still be able to reference it, and use it:
+<pre><code>
+var cubes = [1,2,3,4,5].map(function(num) { return {x : num, cube : cube(num)}})
+</code></pre>
+Which will give us:
+<code class="litjs-inline-table">cubes</code>
+</p>
+
+<p>
+What about referencing other <i>variables</i>?<br/>
+For example, given the definition <a href="#arr_def">arr_def</a>, can we write: 
+<pre class="litjs-ignore"><code>
+var factCubes = arr.map(function(x) {
+	return { x : x, factCube : factorial(cube(x))}
+})
+</code></pre>
+?<br/>
+This probably won't work (and the last block is marked to ignore, to prevent errors), as <code>arr</code> hasn't been defined yet at this point in the flow of the document.
+</p>
+<p>
+We should be able, however, to reference specific code blocks, in advance, by their ID, and have them embedded into our blocks.<br/>
+For example, we can write:
+<pre><code>
+
+@@("arr_def")
+
+var factCubes = arr.map(function(x) {
+	return { x : x, factCube : factorial(cube(x))}
+})
+
+</code></pre>
+We essentially embed the code block with id <code>arr_def</code> into the above code block. The exact code of <a href="#arr_def"><code>arr_def</code></a> will be embedded as-is. In case it also has embedded code in it, it will also be resolved and embedded, recursively.
+And this should work, giving us: <code class="litjs-inline-table">factCubes</code>
+</p>
+
+<p>
+Note:
+<ul>
+	<li>Code blocks that are to be embedded have to have a unique id specified for them.</li>
+	<li>Code blocks that are embedded into other ones (using the '@@' notation, as shown above) will not be evaluated again after they are embedded at least once. However, they can be embedded a number of times.</li>
+	<li>In case the referenced id doesn't exist, an exception will be thrown</li>
+	<li>The embedded id has to be unique, otherwise, it's not guaranteed which code is embedded</li>
+</ul>
+</p>
+<hr/>
+
+<h3>Top-Down Code</h3>
+<p>
+This feature has a nice corollary - it allows us to embed code block wherever we want them, even before they appear.
+This essentially gives us the ability to write higher level code in one place in the document, and break it down into more detailed chunks later.<br/>
+This might be useful if you want, for example, to separate the flow of control of from the actual data processing, and provide explanations to them separately.<br/>
+</p>
+<p>
+As a very simplistic example, consider the following code, which creates a greeting:
+<pre><code>
+@@("pimped_date") //embedding code for extra Date object definitions.
+
+var greeting = new Date().getHours() < 12 ? @@("am_code") : @@("pm_code")
+
+</code></pre>
+Giving us a greeting: <code class="inline">greeting</code>
+</p>
+<p>
+The actual code blocks calculating the greeting, can be written separately, e.g. down here:<br/>
+A morning greeting is:
+<pre id="am_code"><code>
+"Good morning, what a lovely " + @@("season") + " morning"
+</code></pre>
+
+while an afternon/evening greeting is:
+<pre id="pm_code"><code>
+"Good afternoon, what a lovely " + @@("season") + " day"
+</code></pre>
+
+
+And the season determined here:
+
+<pre id="season"><code>new Date().season()</code></pre>
+
+
+Invoking a function defined here:
+<pre id="pimped_date" title="Definition of 'season' method (pimped_date)"><code>
+Date.prototype.season = function()
+{
+	var month = new Date().getMonth()+1;	
+	var ret = "";
+	switch (true)
+	{
+		case month >=  4 && month < 6 : ret = "Spring"; break;
+		case month >= 6 && month < 9 : ret = "Summer"; break;
+		case month >= 9 && month < 11 : ret = "Autumn"; break;
+		default  : ret = "Winter"; break;
+	}
+	return ret;
+}
+</code></pre>
+</p>
+
+<p>
+This example, however simple, also shows that embeddings can happen recursively - an embedded block may also embed others.<br/>
+Also, it shows how to reuse code, and opens the door for clearer documents, allowing us to focus on each part of the program where appropriate.
+</p>
+<hr/>
+
+<h3>Referenced Code</h3>
+This is the code referenced in the code blocks above.
+<pre id="cube_def" title="Defining a 'cube' function (cube_def)"><code>
+function cube(x) { return x * x * x; }
+</code></pre>
+
+<pre id="arr_def" title="Data to process (arr_def)"><code>
+var arr = [1,2,3,4,5,6]
+</code></pre>
+
+</body>
+</html>
