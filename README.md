@@ -102,10 +102,10 @@ Also, tooltips, with the given variable name will be added to the inputs marked 
 
 ### Ignoring Specific PRE CODE Element
 As a rule, LitJS searches for `code` elements within `pre` elements, and evaluates them.
-In case you want to have such an element, but not have it evaluated by LitJS, simply add the `litjs-ignore` attribute to the `pre` element.
+In case you want to have such an element, but not have it evaluated by LitJS, simply add the `litjs-ignore` class to the `pre` element.
 For example:
 ```
-<pre litjs-ignore>
+<pre class="litjs-ignore">
 <code> ... </code>
 </pre>
 ```
