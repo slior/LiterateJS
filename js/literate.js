@@ -145,7 +145,9 @@ var LitJS = {
 	// extensions handling
 	extendWith : function(extension)
 	{
+		if (typeof(extension) != "object") throw "Invalid extension type. Must be an object"
 		if (!extension) throw "Invalid extension"
+		
 		this.extensions.add(extension)
 	},
 	

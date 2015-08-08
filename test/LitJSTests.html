@@ -173,6 +173,36 @@
 		
 		LitJS.evalInputs(mockJQ)
 	})
+	
+	_.module("Extensions")
+	_.test("Adding an extension",function(assert) {
+		var countBefore = LitJS.extensions.exts.length;
+		var testExt = { dummy : true }
+		LitJS.extendWith(testExt)
+		var countAfter = LitJS.extensions.exts.length;
+		
+		assert.deepEqual(countBefore,countAfter - 1,"Should add one object for the extension")
+		assert.deepEqual(LitJS.extensions.exts[countAfter-1].extension,testExt,"Should add the dummy extension")
+		assert.ok(LitJS.extensions.exts[countAfter-1].condition.call(this),"Condition for unconditional extension should be true")
+	})
+	
+	_.test("Trying to add an invalid extension throws an exception",function(assert) {
+	
+		[undefined,1,true,false].forEach(function(val) {
+			assert.throws(function() {
+				LitJS.extendWith(val);
+			},
+			function (err) { return err.toString() == "Invalid extension type. Must be an object" },
+			"non-object ('" + typeof(val) + "') should throw an invalid type error")
+		})
+		
+		assert.throws(function() {
+			LitJS.extendWith(null);
+		},
+		function (err) { return err.toString() == "Invalid extension" },
+		"'null' should throw an 'Invalid extension' error")
+	
+	})
   </script>
 </body>
 </html>
