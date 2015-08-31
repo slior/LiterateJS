@@ -25,7 +25,7 @@
 - extensions: 
   - ~~specify a specific extension for a specific element (e.g. drawing results)~~
   - hook for before/after block execution
-- allow true out-of-order execution. code blocks should be able to easily reference other code blocks.
+- ~~allow true out-of-order execution. code blocks should be able to easily reference other code blocks.~~
 - ~~tooltips for inline block should show the code used for calculating it.~~
 - allow integration with external code
 - literate code templates.

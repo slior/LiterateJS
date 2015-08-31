@@ -79,22 +79,18 @@ var LitJS = {
 		var doc = _doc || document
 		
 		var scriptBlocks = this.locateScriptBlocks($);
-		var snippets = scriptBlocks.map(function(b) { return b.wrappedCode(); })
+		scriptBlocks.forEach(function(block){
+			block.resolveEmbeddedBlocks(scriptBlocks) //will also mark embedded blocks as such.
+		})
+		var snippets = scriptBlocks
+						.filter(function(b) { return !b.embedded; })
+						.map(function(b) { return b.wrappedCode(); })
 		
 		if (snippets.length > 0) //actually create and insert the JS element. This also executes the script
 			this.createAndInsertJS(snippets.join("\n"),doc,this.BlocksScriptID)
 		
 		return scriptBlocks;
 	},
-	codeBlockFooter : function()
-	{
-		return "}\n" + this.BlocksFunctionName + "();"
-	},
-	codeBlockHeader : function()
-	{
-		return "function " + this.BlocksFunctionName + "() {"
-	},
-	BlocksFunctionName : "LIT_CODE",
 	BlocksScriptID : "litjs-block",
 	evalInline : function(jq)
 	{
@@ -146,9 +142,12 @@ var LitJS = {
 	generateBlockID : function() { return "block_" + (LitJS.lastID++); },
 	lastID : 0,
 	
+	// extensions handling
 	extendWith : function(extension)
 	{
+		if (typeof(extension) != "object") throw "Invalid extension type. Must be an object"
 		if (!extension) throw "Invalid extension"
+		
 		this.extensions.add(extension)
 	},
 	
@@ -251,14 +250,7 @@ function LitCodeBlock(htmlCodeNode)
 	this.code = htmlCodeNode.innerText
 	this.parent = $(htmlCodeNode.parentElement)
 	this.id = htmlCodeNode.parentElement.id || LitJS.generateBlockID()
-	this.insertJSTo = function (doc)
-	{
-		var js = doc.createElement('script');
-		js.type = "text/javascript"
-		
-		js.text = this.code
-		doc.head.appendChild(js);
-	}
+	this.embedded = false;  //by default, a code block is not embedded.
 	
 	this.wrappedCode = function()
 	{
@@ -270,7 +262,7 @@ function LitCodeBlock(htmlCodeNode)
 		
 		var ret = []
 		ret.push("try {")
-			ret.push(this.code)
+			ret.push(this.processedCode || this.code)
 		ret.push("}")
 		ret.push("catch (exn) {")
 			ret.push(resolveErrorHandlingCode(this.id))
@@ -278,6 +270,30 @@ function LitCodeBlock(htmlCodeNode)
 		
 		return ret.join("\n")
 	}
+	
+	//returns the code of this block, including any embeddings of other blocks. 
+	// it will possibly process its original code and embed any other necessary code, recursively.
+	this.resolveEmbeddedBlocks = function(allBlocks)
+	{
+		function blockByID(_id) 
+		{
+			var a = allBlocks.filter(function(b) { return b.id == _id})
+			if (a.length <= 0) throw "Couldn't find script block with id: " + _id
+			return a[0]
+		}
+		
+		if (!this.processedCode)
+		{
+			var newCode = this.code.replace(/@@\("(\w+)"\)/g,function(complete,matchedID) {
+				var blockToEmbed = blockByID(matchedID)
+				blockToEmbed.embedded = true;
+				return blockToEmbed.resolveEmbeddedBlocks(allBlocks); //call recursively in case the embedded code also has embeddings
+			})
+			this.processedCode = newCode;
+		}
+		return this.processedCode;
+	}
+	
 	return this;
 }
 
