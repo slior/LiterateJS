@@ -121,7 +121,17 @@ var LitJS = {
 			if (typeof(result) != "object" || !(result.length))
 				throw "Can't render a non-array as a table"
 			var jqEl = $(codeEl)
-			jqEl.before(this.extensions.singleForHook("inlineTblRender",codeEl).call(this,result,codeEl))
+			
+			//see if we have a table rendered for this code block, and if yes, remove it.
+			jqEl.prev("div[tbl_wrapper]").remove()
+			
+			//now create the new table, and insert it before the code element
+			var h = []
+			h.push("<div tbl_wrapper>")
+				h.push(this.extensions.singleForHook("inlineTblRender",codeEl).call(this,result,codeEl))
+			h.push("</div>")
+			
+			jqEl.before(h.join(""))
 			jqEl.addClass("hidden")
 		}, this)
 		
@@ -156,6 +166,12 @@ var LitJS = {
 		if (!extension) throw "Invalid extension"
 		condition = condition || function() { return true; }
 		this.extensions.addConditionally(extension,condition);
+	},
+	
+	hasAttribute : function(htmlNode,att)
+	{
+		if (!htmlNode || !att) return false;
+		return typeof (htmlNode.attributes[att]) != "undefined"
 	},
 	
 	// Object handling all extensions to LitJS

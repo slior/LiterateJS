@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cross Referencing Example</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/LitJS.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+
+	<script type="text/javascript" src="../js/literate.js"></script>
+	
+	<style>
+	
+	body {
+		padding-left:10px
+	}
+	
+	p {
+		text-align:justify
+	}
+	
+	blockquote {
+		font-size : 90%;
+	}
+	
+	</style>
+	<script type="text/javascript">
+	
+	
+	hljs.initHighlightingOnLoad();
+	
+	function pageLoaded()
+	{
+		LitJS.eval();
+	}
+	
+	</script>
+</head>
+<body onload="pageLoaded()">
+
+<h2>Inlining Table Expressions with Interactive Inputs</h2>
+<p>
+Let's say we define a simple function, e.g. factorial.<br/>
+For example:
+<pre id="fact_def"><code>
+function factorial(n)
+{
+	return n <= 1 ? 1 : factorial(n-1) * n;
+}
+</code></pre>
+And we apply a number of times, based on an input given by the user (that's you).<br/>
+Number of times to compute: <input type=number id="valueCount" value="5" class="lit-value"></input>
+</p>
+<p>
+We can now use it, for example in this block:
+<pre id="fact_use"><code>
+
+var results = []
+for (var i = 0; i < valueCount; i++)
+	results.push({x : i, fact : factorial(i)})
+
+</code></pre>
+Giving us: <code class="litjs-inline-table">results</code>
+</p>
+</body>
+</html>
