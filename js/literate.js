@@ -258,8 +258,8 @@ LitJS.extendWith({
 function LitCodeBlock(htmlCodeNode)
 {
 	this.title = htmlCodeNode.parentElement.title
-	this.isCollapsed = typeof (htmlCodeNode.parentElement.attributes["collapsed"]) != "undefined"
-	this.isCollapsible = this.isCollapsed || (typeof (htmlCodeNode.parentElement.attributes["collapsible"]) != "undefined")
+	this.isCollapsed = LitJS.hasAttribute(htmlCodeNode.parentElement,"collapsed")
+	this.isCollapsible = this.isCollapsed || LitJS.hasAttribute(htmlCodeNode.parentElement,"collapsible")
 	this.code = htmlCodeNode.innerText
 	this.parent = $(htmlCodeNode.parentElement)
 	this.id = htmlCodeNode.parentElement.id || LitJS.generateBlockID()
