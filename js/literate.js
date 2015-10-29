@@ -121,13 +121,13 @@ var LitJS = {
 			if (typeof(result) != "object" || !(result.length))
 				throw "Can't render a non-array as a table"
 			var jqEl = $(codeEl)
-			
+			var TBL_WRAPPER_INDICATOR = "tbl_wrapper"
 			//see if we have a table rendered for this code block, and if yes, remove it.
-			jqEl.prev("div[tbl_wrapper]").remove()
+			jqEl.prev("div[" + TBL_WRAPPER_INDICATOR + "]").remove()
 			
 			//now create the new table, and insert it before the code element
 			var h = []
-			h.push("<div tbl_wrapper>")
+			h.push("<div " + TBL_WRAPPER_INDICATOR + ">")
 				h.push(this.extensions.singleForHook("inlineTblRender",codeEl).call(this,result,codeEl))
 			h.push("</div>")
 			
