@@ -180,7 +180,6 @@ var LitJS = {
 		//Add the given extension object.
 		add : function(extension)
 		{
-			//this.exts.push(extension)
 			this.addConditionally(extension, function(hook,el) { return true; })
 		},
 		
@@ -204,8 +203,6 @@ var LitJS = {
 			if (matched.length <= 0)
 				throw "No extension found for " + hookID;
 			else
-				//return (matched.pop())[hookID] || null
-				//return (matched[matched.length-1])[hookID] || null
 				return (matched[matched.length-1]).extension[hookID] || null
 		}
 		
