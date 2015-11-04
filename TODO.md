@@ -29,3 +29,4 @@
 - ~~tooltips for inline block should show the code used for calculating it.~~
 - allow integration with external code
 - literate code templates.
+- add the option to easily show/hide hidden code blocks
