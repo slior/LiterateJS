@@ -30,3 +30,5 @@
 - allow integration with external code
 - literate code templates.
 - add the option to easily show/hide hidden code blocks
+- for collapsed code block - tooltip that shows the code.
+- for inline code block, after evaluation - have an option to show underlying code, e.g. using a tooltip, or by clicking on it.
