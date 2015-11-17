@@ -2,42 +2,42 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Cross Referencing Example</title>
+    <title>Rendering Tables with Inputs</title>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../css/LitJS.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	
+
 	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
 
 	<script type="text/javascript" src="../js/literate.js"></script>
-	
+
 	<style>
-	
+
 	body {
 		padding-left:10px
 	}
-	
+
 	p {
 		text-align:justify
 	}
-	
+
 	blockquote {
 		font-size : 90%;
 	}
-	
+
 	</style>
 	<script type="text/javascript">
-	
-	
+
+
 	hljs.initHighlightingOnLoad();
-	
+
 	function pageLoaded()
 	{
 		LitJS.eval();
 	}
-	
+
 	</script>
 </head>
 <body onload="pageLoaded()">
@@ -65,6 +65,16 @@ for (var i = 0; i < valueCount; i++)
 
 </code></pre>
 Giving us: <code class="litjs-inline-table">results</code>
+</p>
+
+<p>
+  Another example of a different table, calculated on the fly:
+  <code class="litjs-inline-table">
+      results = [];
+      for (var j = valueCount-1; j >= 0; j--)
+        results.push({a : j, fact : factorial(j)});
+      results;
+  </code>
 </p>
 </body>
 </html>

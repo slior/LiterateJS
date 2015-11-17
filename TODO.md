@@ -22,7 +22,7 @@
 - adding support for integrating unit tests nicely.
 - Document extension points
 - for extensions: add the option to fallback to previous/default behavior
-- extensions: 
+- extensions:
   - ~~specify a specific extension for a specific element (e.g. drawing results)~~
   - hook for before/after block execution
 - ~~allow true out-of-order execution. code blocks should be able to easily reference other code blocks.~~
@@ -31,4 +31,4 @@
 - literate code templates.
 - add the option to easily show/hide hidden code blocks
 - for collapsed code block - tooltip that shows the code.
-- for inline code block, after evaluation - have an option to show underlying code, e.g. using a tooltip, or by clicking on it.
+- ~~for inline code block, after evaluation - have an option to show underlying code, e.g. using a tooltip, or by clicking on it.~~
