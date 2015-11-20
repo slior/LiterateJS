@@ -11,8 +11,10 @@
 	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
 
-  <script type="text/javascript" src="marked.js"></script>
 	<script type="text/javascript" src="../js/literate.js"></script>
+  <script type="text/javascript" src="../plugins/litjs_md/marked.js"></script>
+  <script type="text/javascript" src="../plugins/litjs_md/litjs-md.js"></script>
+
 
 	<style>
 
@@ -70,11 +72,11 @@
   Brute force search should be enough for this problem, but we need to set the upper bound for that. How do we find it?
 
 
-  Well, 9^5  = `Math.pow(9,5)` , which is a 5-digit number; i.e. the solution will have at least 5 numbers.
+  Well, 9<sup>5</sup>  = `Math.pow(9,5)` , which is a 5-digit number; i.e. the solution will have at least 5 numbers.
 
   This brings us to 5 \* 9<sup>5</sup>  = `5 * Math.pow(9,5)` , which is a 6 digit number.
 
-  Hence, we come to 6 \* 9<sup>5</sup>  = `6 * Math.pow(9,6)`, and rounding up a bit will leave us at 355000.
+  Hence, we come to 6 \* 9<sup>5</sup>  = `6 * Math.pow(9,5)`, and rounding up a bit will leave us at 355000.
 
   ```
   var power = 5
@@ -83,7 +85,8 @@
 
   We now pre-compute the 5<sup>th</sup> power of all the digits, so we can reuse that quickly in our solution:
 
-  ``` {"id":"digits"}
+  ```
+  //litjs: id="digits" collapsible title="some title"
   var digitsPowered = [];
   for (i = 0; i < 10; i++)
   	digitsPowered.push(Math.pow(i,power))
@@ -92,6 +95,7 @@
   And now we're ready to solve, essentially a brute force search:
 
   ```
+  //litjs: title="Algorithm"
   var sum = function(arr) { return arr.reduce(function(pv,cv) { return pv+cv},0); };
   var sumPowerDigits = function(num)
   {
@@ -113,67 +117,11 @@
   var result = sum(validValues);
   ```
 
-  And this results in : `result`
+  The resulting valid values are `validValues`.
+
+  And their sum is: `result`
 
 </div>
-
-<script>
-
-var renderer = new marked.Renderer()
-
-function renderInlineCodeBlocksAsEvals(code)
-{
-  // console.log("code = " + code)
-
-  var h = []
-  h.push("<code class='inline'>") //TODO: should support more classes somehow
-    h.push(code)
-  h.push("</code>")
-  return h.join("")
-}
-
-renderer.codespan = renderInlineCodeBlocksAsEvals
-
-
-renderer.code = function(code,lang) {
-  // console.log("code = " + code)
-  // console.log("lang = " + lang)
-
-  var h = []
-
-  var atts = lang ? JSON.parse(lang) : {} //TODO: should generically transfer all attributes
-  h.push("<pre " + (atts.id ? "id='" + atts.id + "'" : "") + "><code>")
-    h.push(code)
-  h.push("</code></pre>")
-
-  return h.join("")
-
-}
-
-function renderMD()
-{
-  function prepareHTMLForMD(str) {
-    return str.replace(/&gt;/g,'>')
-              .replace(/&lt;/g,'<')
-  }
-
-  var divs = $(".md_content")
-  var texts = divs.toArray()
-                  .map(function (d) { return prepareHTMLForMD($(d).html())})
-  var htmls = texts.map(function(text) { return marked(text,{ renderer : renderer})})
-
-  divs.each(function(index) { $(this).html(htmls[index]); return true; })
-}
-
-
-
-marked.setOptions({
-  renderer : renderer,
-  smartypants: true
-});
-
-///renderMD()
-</script>
 
 </body>
 </html>
