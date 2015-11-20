@@ -2,7 +2,7 @@
 ## TODO/Further Enhancements
 (in no particular order)
 
-- Support markdown
+- ~~Support markdown~~
 - ~~Reusing/referencing code blocks from other code blocks.~~
 - Other languages?
 - ~~Expanding/Collapsing code blocks.~~
@@ -24,7 +24,7 @@
 - for extensions: add the option to fallback to previous/default behavior
 - extensions:
   - ~~specify a specific extension for a specific element (e.g. drawing results)~~
-  - hook for before/after block execution
+  - hook for ~~before~~/after block execution
 - ~~allow true out-of-order execution. code blocks should be able to easily reference other code blocks.~~
 - ~~tooltips for inline block should show the code used for calculating it.~~
 - allow integration with external code
