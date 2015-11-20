@@ -20,11 +20,16 @@ LitJS.extendWith({
 
       litjsMDRenderer.code = function(code,lang) {
         var h = []
-        var re = /\/\/litjs:[\t ]+((.)*)[\s]*/ //should this be a more specific (safe?) regex
-        var match = re.exec(code)
-        code = match ? code.replace(re,"") : code
-        h.push("<pre " + ((match && match[1]) || '') + "><code>")
-          h.push(code)
+        var preRE = /\/\/litjs:[\t ]+((.)*)[\s]*/ //should this be a more specific (safe?) regex
+        var match = preRE.exec(code)
+        code = match ? code.replace(preRE,"") : code
+        h.push("<pre " + ((match && match[1]) || '') + ">")
+
+          var codeRE = /\/\/litjs-code:[\t ]+((.)*)[\s]*/
+          match = codeRE.exec(code)
+          code = match ? code.replace(codeRE,"") : code
+          h.push("<code " + ((match && match[1] || '')) + ">")
+            h.push(code)
         h.push("</code></pre>")
 
         return h.join("")
