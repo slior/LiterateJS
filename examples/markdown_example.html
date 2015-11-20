@@ -12,8 +12,8 @@
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
 
 	<script type="text/javascript" src="../js/literate.js"></script>
-  <script type="text/javascript" src="../plugins/litjs_md/marked.js"></script>
-  <script type="text/javascript" src="../plugins/litjs_md/litjs-md.js"></script>
+  <script type="text/javascript" src="../extensions/litjs_md/marked.js"></script>
+  <script type="text/javascript" src="../extensions/litjs_md/litjs-md.js"></script>
 
 
 	<style>
@@ -85,7 +85,7 @@
   We now pre-compute the 5<sup>th</sup> power of all the digits, so we can reuse that quickly in our solution:
 
   ```
-  //litjs: id="digits" collapsible title="some title"
+  //litjs: collapsed title="Preprocessing"
   var digitsPowered = [];
   for (i = 0; i < 10; i++)
   	digitsPowered.push(Math.pow(i,power))
