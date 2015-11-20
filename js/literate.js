@@ -2,6 +2,14 @@
 var LitJS = {
 	eval : function()
 	{
+
+		try {
+			var preEvalFunc = this.extensions.singleForHook('preEval')
+			preEvalFunc.call(this)
+		} catch (e) {
+			console.log('No preEval extensions')
+		}
+
 		this.evalInputs();
 		var scriptBlocks = this.evalScriptBlocks();
 		this.createHeadersFor(scriptBlocks)
@@ -249,7 +257,8 @@ LitJS.extendWith({
 		h.push('</table>')
 		return h.join("");
 
-	}
+	},
+	preEval : function() { }
 
 })
 
