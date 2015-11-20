@@ -4,10 +4,10 @@ var LitJS = {
 	{
 
 		try {
-			var preEvalFunc = this.extensions.singleForHook('preEval')
-			preEvalFunc.call(this)
+			var preEvalFuncs = this.extensions.allForHook('preEval')
+			preEvalFuncs.forEach(function(f) { f.call(this); })
 		} catch (e) {
-			console.log('No preEval extensions')
+			console.log(e.toString())
 		}
 
 		this.evalInputs();
@@ -212,6 +212,24 @@ var LitJS = {
 				throw "No extension found for " + hookID;
 			else
 				return (matched[matched.length-1]).extension[hookID] || null
+		},
+
+		/*
+			Given a hookID (and element to evaluate the possible condition on), return the list of extensions
+			registered to this extension (=hook) id.
+			If no extension is found, an empty array is returned, otherwise an array of the functions is returned.
+		 */
+		allForHook : function(hookID,el)
+		{
+			return this.exts.filter(function(entry) {
+				var ext = entry.extension;
+				var cond = entry.condition;
+
+				return cond.call(this,hookID,el) && typeof(ext[hookID]) != "undefined"
+			})
+			.map(function(entry) {
+				return entry.extension[hookID]
+			})
 		}
 
 	}

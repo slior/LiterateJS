@@ -14,6 +14,7 @@
 	<script type="text/javascript" src="../js/literate.js"></script>
   <script type="text/javascript" src="../extensions/litjs_md/marked.js"></script>
   <script type="text/javascript" src="../extensions/litjs_md/litjs-md.js"></script>
+  <script type="text/javascript" src="../extensions/litjs_hljs/litjs-hljs.js"></script>
 
 
 	<style>
@@ -33,10 +34,11 @@
 	</style>
   <script type="text/javascript">
 
-  hljs.initHighlightingOnLoad();
+
 
   function pageLoaded()
   {
+
     LitJS.eval();
   }
 
@@ -78,6 +80,7 @@
   Hence, we come to 6 \* 9<sup>5</sup>  = `6 * Math.pow(9,5)`, and rounding up a bit will leave us at 355000.
 
   ```
+  //litjs-code: class="lang-javascript"
   var power = 5
   var upperBound = 355000;
   ```
