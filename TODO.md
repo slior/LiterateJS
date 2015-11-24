@@ -3,7 +3,7 @@
 (in no particular order)
 
 - ~~Support markdown~~
-  - support attributes (specifically different classes) in inline code blocks
+  - ~~support attributes (specifically different classes) in inline code blocks~~
 - ~~Reusing/referencing code blocks from other code blocks.~~
 - Other languages?
 - ~~Expanding/Collapsing code blocks.~~
