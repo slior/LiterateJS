@@ -62,6 +62,24 @@
     assert.deepEqual(codeEl.text(),"var x = 7","Markdown litjs-code attribute metadata is removed from code")
   })
 
+  _.test("Attributes on inline code block",function(assert) {
+    var codeEl = $("#test5").find("code#inlinecode1")
+    assert.deepEqual(codeEl.toArray().length,1,"ID attribute is applied to inline code element")
+    assert.deepEqual(codeEl.text(),"16","Code is evaluated properly")
+
+  })
+
+  _.test("Invalid attribute settings",function(assert) {
+    var codeEl = $("#test6").find("code")
+    assert.deepEqual(codeEl[0].title,"/*litjs:id=nospace */ Math.pow(4,2)","No space after 'litjs:' ignores the attribute settings in inline code block")
+    assert.deepEqual(codeEl.text(),"16","Invalid attribute setting still evaluates the code")
+
+    codeEl = $('#test7').find("code")
+    assert.deepEqual(codeEl.text().replace(/[\r\n]+/,""),
+                    "//litjs:someprop=somevaluevar x = 8",
+                    "No space after 'litjs:' ignores the attribute settings in code block")
+
+  })
   </script>
 
   <div id="test1" class="md_content" style="display:none">
@@ -70,7 +88,7 @@
 With some markup, at least *basic* _one_
 </div>
 
-  <div id="test2", class="md_content" style="display:none">
+  <div id="test2" class="md_content" style="display:none">
 Some content
 
 and some code:
@@ -79,13 +97,13 @@ var x = 5
 ```
   </div>
 
-  <div id="test3", class="md_content" style="display:none">
+  <div id="test3" class="md_content" style="display:none">
 ### Some content
 
 and some code: `Math.pow(4,2)`
   </div>
 
-  <div id="test4", class="md_content" style="display:none">
+  <div id="test4" class="md_content" style="display:none">
 ### Some content
 
 and some code:
@@ -98,8 +116,34 @@ var x = 6
 //litjs-code: id=codeBlock2
 var x = 7
 ```
+  </div>
+
+  <div id="test5" class="md_content" style="display:none">
+### Some content
+
+Some inline code with attributes: `/*litjs: id=inlinecode1 */ Math.pow(4,2)`
+  </div>
+
+
+  <div id="test6" class="md_content" style="display:none">
+### Some content
+
+Some inline code with attributes: `/*litjs:id=nospace */ Math.pow(4,2)`
+  </div>
+
+  <div id="test7" class="md_content" style="display:none">
+### Some content
+
+Some code with invalid metadata setting (missing space):
+```
+//litjs:someprop=somevalue
+var x = 8
+```
+
 
   </div>
+
+
 
 </body>
 </html>
