@@ -12,46 +12,46 @@
   <div id="qunit-fixture"></div>
   <script src="http://code.jquery.com/qunit/qunit-1.18.0.js"></script>
   <script>
-  
+
 	var _ = QUnit;
-  
-	function wrapInToArr(arr) { 
-		return { 
-			not : function(selector) { 
+
+	function wrapInToArr(arr) {
+		return {
+			not : function(selector) {
 					return {
 						children : function(selector) {
 									return { toArray : function() { return arr} }
 						}
-					}; 
+					};
 				}
 		}
 	}
-	
+
 	function mockScript(script,assertionBlock)
 	{
-		
+
 		return function(selector)
 		{
 			if (assertionBlock) assertionBlock(selector);
-			return wrapInToArr(script ? 
-								[{	innerText : script, 
+			return wrapInToArr(script ?
+								[{	innerText : script,
 									parentElement: {attributes:{}}
-								}] 
+								}]
 								: []
 							);
 		}
 	}
-	
+
 	_.module("Script Blocks")
-    _.test( "Flow of script block evaluation", function( assert ) 
+    _.test( "Flow of script block evaluation", function( assert )
 	{
 		assert.expect(3)
 		var testScript = "var x = 5"
 		var expectedScript = "try {\n" + testScript + "\n}\ncatch (exn) {\nalert('Error in block block_0: ' + exn);\n}";
 		var mockJQ = mockScript(testScript,
 						function(selector) { assert.deepEqual(selector,'pre', "Looks for 'pre' elements"); })
-		
-		var mockDoc = 
+
+		var mockDoc =
 		{
 			createElement : function(tag) { assert.deepEqual(tag,"script", "Creates a 'script' tag"); return {  }; },
 			head : {
@@ -60,23 +60,23 @@
 				}
 			}
 		};
-		
+
 		LitJS.evalScriptBlocks(mockJQ,mockDoc)
     });
-	
-	_.test("Evaluating a simple block", function(assert) 
+
+	_.test("Evaluating a simple block", function(assert)
 	{
 		LitJS.evalScriptBlocks(mockScript("var x = 5"));
 		assert.ok( x == 5,"Should have a variable named x with the value of 5")
 	});
-	
+
 	_.test("Evaluates multi-line script", function(assert) {
 		var testScript = "var x = 5 \n var y = x + 2"
-		
+
 		LitJS.evalScriptBlocks(mockScript(testScript));
 		assert.ok(y == 7, "Should evaluate y to 7")
 	})
-	
+
 	_.test("No code blocks ==> should not create new script tags",function(assert) {
 		assert.expect(0)
 		var mockDoc = {
@@ -87,12 +87,12 @@
 		}
 		LitJS.evalScriptBlocks(mockScript(),mockDoc)
 	})
-	
+
 	_.test("A script block with a title should have a header", function(assert) {
 		var testScript = "var y = 38";
 		var testTitle = "Test Title"
 		var blockID = "blockID" //also testing for insertion of custom block ID
-		var mockJQ = function(selector) 
+		var mockJQ = function(selector)
 		{
 			if (typeof(selector) == 'string')
 			{
@@ -102,7 +102,7 @@
 			else //wrapping an object
 			{
 				return {
-					wrap : function(html) { 
+					wrap : function(html) {
 						assert.deepEqual(html,"<div class='panel panel-info'><div class='panel-body' id='"+blockID+"'></div></div>",
 									"Creates divs with correct styles");
 					},
@@ -119,19 +119,19 @@
 		}
 		LitJS.evalScriptBlocks(mockJQ);
 	})
-	
+
 	_.test("Locating script blocks correctly", function(assert) {
 		var block1 = { parentElement : { title : "block 1", attributes : {} }, innerText : "some code"}
 		var block2 = { parentElement : { title : "block 2", attributes : {},id : "block id" }, innerText : "some more code"}
 		var mockJQ = function(selector) { return wrapInToArr ([ block1,block2 ]) }
-		
+
 		var res = LitJS.locateScriptBlocks(mockJQ);
 		assert.deepEqual(res.length,2,"Found 2 blocks");
 		assert.deepEqual(res[1].id,block2.parentElement.id,"Second block returned correctly")
-		assert.ok(res[0].constructor == LitCodeBlock && 
+		assert.ok(res[0].constructor == LitCodeBlock &&
 				  res[1].constructor == LitCodeBlock,"Blocks are of correct type")
 	})
-	
+
 	_.module("Inline Expressions")
 	_.test("Flow of inline script evaluation", function(assert){
 		assert.expect(4)
@@ -143,23 +143,23 @@
 			assert.ok(selector == 'code.inline' ||
 					  selector == 'code.litjs-inline-obj' ||
 					  selector == 'code.litjs-inline-table', "Looks for the inline code elements by correct classes");
-			
+
 			var ret = selector == 'code.inline' ? [mockExprEl] : [];
 			ret.toArray = function() { return ret; }
 			return ret;
 		}
-		
+
 		LitJS.evalInline(mockJQ);
 		assert.deepEqual(mockExprEl.innerText,4,"Should switch element's inner text to script evaluation result")
 	})
-	
+
 	_.module("Interactive LitJS")
 	_.test("A litjs value input should be picked up",function(assert) {
 		var mockInp = {
-			toArray : function() { 
+			toArray : function() {
 						return [
 							{ id : "id1", value : 2 }
-						]; 
+						];
 					},
 			change : function(f) {
 				assert.ok(true,"Change is called on the 'lit-value' inputs")
@@ -170,24 +170,24 @@
 			assert.deepEqual(selector,'input.lit-value',"Looks for 'lit-value' inputs")
 			return mockInp
 		}
-		
+
 		LitJS.evalInputs(mockJQ)
 	})
-	
+
 	_.module("Extensions")
 	_.test("Adding an extension",function(assert) {
 		var countBefore = LitJS.extensions.exts.length;
 		var testExt = { dummy : true }
 		LitJS.extendWith(testExt)
 		var countAfter = LitJS.extensions.exts.length;
-		
+
 		assert.deepEqual(countBefore,countAfter - 1,"Should add one object for the extension")
 		assert.deepEqual(LitJS.extensions.exts[countAfter-1].extension,testExt,"Should add the dummy extension")
 		assert.ok(LitJS.extensions.exts[countAfter-1].condition.call(this),"Condition for unconditional extension should be true")
 	})
-	
+
 	_.test("Trying to add an invalid extension throws an exception",function(assert) {
-	
+
 		[undefined,1,true,false].forEach(function(val) {
 			assert.throws(function() {
 				LitJS.extendWith(val);
@@ -195,14 +195,41 @@
 			function (err) { return err.toString() == "Invalid extension type. Must be an object" },
 			"non-object ('" + typeof(val) + "') should throw an invalid type error")
 		})
-		
+
 		assert.throws(function() {
 			LitJS.extendWith(null);
 		},
 		function (err) { return err.toString() == "Invalid extension" },
 		"'null' should throw an 'Invalid extension' error")
-	
+
 	})
+
+  _.test("Pre-eval hooks",function(assert) {
+    var extensionsInvoked = [];
+    LitJS.extendWith({ preEval : function () { extensionsInvoked.push('ext1') } })
+
+    LitJS.eval();
+    assert.deepEqual(extensionsInvoked,['ext1'] ,"Pre-eval extension should be called when invoking 'eval'")
+
+    LitJS.extendWith({ preEval : function () { extensionsInvoked.push('ext2') } })
+
+    extensionsInvoked = []
+    LitJS.eval();
+    assert.deepEqual(extensionsInvoked,['ext1','ext2'] ,"If there's more than one extension to preEval, all should be called, by the order extended")
+
+    var oldLog = console.log
+    var msgs = []
+    console.log = function(msg) { msgs.push(msg) }
+
+    var errMsg = "Exception thrown from preEval extension";
+    LitJS.extendWith({ preEval : function () { throw errMsg } })
+
+    LitJS.eval()
+    assert.deepEqual(msgs,[errMsg],"Exceptions from preEval hooks are logged in the console.")
+    console.log = oldLog;
+  })
+
+
   </script>
 </body>
 </html>
