@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Literate JS Tests</title>
+  <link rel="stylesheet" href="../../css/qunit-1.18.0.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="../../js/literate.js"></script>
+  <script src="./marked.js"></script>
+  <script src="./litjs-md.js"></script>
+
+  <script>
+  function pageLoaded()
+  {
+    //should evaluate all the Markdown elements, and the tests can assert their correctness
+    LitJS.eval();
+  }
+
+  </script>
+</head>
+<body onload="pageLoaded()">
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script src="../../js/qunit-1.18.0.js"></script>
+  <script>
+
+  var _ = QUnit;
+
+
+
+  _.module("Markdown Content")
+  _.test("Markdown content is rendered properly",function(assert) {
+    var htmlContent = $('#test1').html().replace(/[\r\n]+/g,"")
+    var expectedHTML = '<h2 id="some-test-content">Some Test Content</h2><p>With some markup, at least <em>basic</em> <em>one</em></p>'
+
+    assert.deepEqual(htmlContent,expectedHTML,"Markdown should render as HTML")
+  })
+
+  _.test("Markdown with code block renders as code block",function(assert) {
+    var codeEl = $("#test2").find("pre").children("code")
+    assert.deepEqual(codeEl.toArray().length,1,"One code block is rendered per code block in markdown")
+    assert.deepEqual(codeEl.text(),"var x = 5","Code in rendered code block is as in the origina markdown")
+  })
+
+  _.test("Inline code rendering",function(assert) {
+    var codeEl = $("#test3").find("code.inline")
+    assert.deepEqual(codeEl.toArray().length,1,"One inline code block is rendered per code inline block in markdown")
+    assert.deepEqual(codeEl.text(),"16","Inline code block is evaluated properly")
+  })
+
+  _.test("Attributes on code block",function(assert) {
+
+    var codeEl = $("#test4").find("pre#codeBlock1").children("code")
+    assert.deepEqual(codeEl.toArray().length,1,"One code block is rendered per code block in markdown with designated id attribute")
+    assert.deepEqual(codeEl.text(),"var x = 6","Markdown litjs attribute metadata is removed from code")
+
+    var headerPanel = $("#test4").find("div.panel-heading")
+    assert.deepEqual(headerPanel.toArray().length,1,"Exactly one panel header is found for a single code block with a title")
+
+    codeEl = $("#test4").find("pre").children("code#codeBlock2")
+    assert.deepEqual(codeEl.toArray().length,1,"Attributes on code element are also applied")
+    assert.deepEqual(codeEl.text(),"var x = 7","Markdown litjs-code attribute metadata is removed from code")
+  })
+
+  </script>
+
+  <div id="test1" class="md_content" style="display:none">
+## Some Test Content
+
+With some markup, at least *basic* _one_
+</div>
+
+  <div id="test2", class="md_content" style="display:none">
+Some content
+
+and some code:
+```
+var x = 5
+```
+  </div>
+
+  <div id="test3", class="md_content" style="display:none">
+### Some content
+
+and some code: `Math.pow(4,2)`
+  </div>
+
+  <div id="test4", class="md_content" style="display:none">
+### Some content
+
+and some code:
+```
+//litjs: id=codeBlock1 title="First Code Block"
+var x = 6
+```
+
+```
+//litjs-code: id=codeBlock2
+var x = 7
+```
+
+  </div>
+
+</body>
+</html>
