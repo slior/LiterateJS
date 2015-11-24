@@ -33,3 +33,4 @@
 - add the option to easily show/hide hidden code blocks
 - for collapsed code block - tooltip that shows the code.
 - ~~for inline code block, after evaluation - have an option to show underlying code, e.g. using a tooltip, or by clicking on it.~~
+- compiler/command line tool for generating a separate script out of a litjs document.
