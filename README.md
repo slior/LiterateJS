@@ -53,7 +53,7 @@ For example:
 ```
 
 This will result in a panel with a title, using the value of the `title` attribute provided.
-This method uses bootstrap classes to render the resulting HTML. 
+This method uses bootstrap classes to render the resulting HTML.
 
 You can of course use any other valid HTML to produce the title directly. The example shows both methods.
 
@@ -61,7 +61,7 @@ You can of course use any other valid HTML to produce the title directly. The ex
 
 When providing a title, you also have the option to designate the block as a collapsible block.
 If you do that, a small text "button" will appear near the title, allowing the user to collapse and expand the title at will.
-For example: 
+For example:
 ```
 <pre title="Solution" collapsible>
 <code> ... </code>
@@ -86,7 +86,7 @@ For an example of this, refer to the [error example](https://github.com/slior/Li
 
 ### Interactive Literate Blocks
 Blocks can also reference values that are given by in-page input elements.
-For example, given an input element: 
+For example, given an input element:
 ```
 <input type=number id=y class="lit-value" />
 ```
@@ -122,3 +122,9 @@ For a more complete overview and discussion, see the [cross reference example](h
 The code depends on JQuery. Other than that, the example uses Bootstrap and Highlight.JS, but the literate programming doesn't rely on that.
 Some examples use other libraries, the rights to those libraries the property of their respective owners, as designated by their respective licenses.
 
+## Markdown Support in LiterateJS
+
+It is possible to write LiterateJS documents using [Markdown](https://en.wikipedia.org/wiki/Markdown), specifically [Github Flavored Markdown](https://help.github.com/articles/markdown-basics/).
+
+The functionality is available using a separate optional extension to LiterateJS - [litjs-md](https://github.com/slior/LiterateJS/tree/master/extensions/litjs_md). Using this extension allows one to write simple markup documents, with code blocks, and using these as regular text documents.
+See the [extension's documentation](https://github.com/slior/LiterateJS/blob/master/extensions/litjs_md/Markdown_Support.md) for more details.
