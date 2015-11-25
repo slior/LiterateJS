@@ -34,16 +34,15 @@ A code block inside the markdown content (using a single or 3 backticks) will be
 In order to specify specific attributes, e.g. `collapsible`, you can add the HTML attributes as a comment in the first line of code.
 For example:
 
-````
 
+``` 
+    ```
+    //litjs: collapsed title="Preprocessing"
+    var digitsPowered = [];
+    for (i = 0; i < 10; i++)
+       digitsPowered.push(Math.pow(i,power))
+    ```
 ```
-//litjs: collapsed title="Preprocessing"
-var digitsPowered = [];
-for (i = 0; i < 10; i++)
-  digitsPowered.push(Math.pow(i,power))
-```
-
-`````
 
 The `//litjs: ` prefix is mandatory (note the space after the colon - there must be at least one), after that, any attribute can follow.
 
