@@ -45,6 +45,8 @@ var LitJS = {
 									var value = inp.value;
 									if (inp.type == 'checkbox')
 										value = inp.checked
+									else if (inp.type == 'text')
+										value = "'" + value + "'"
 									return "var " + inp.id + " = " + value + ";"
 								})
 
