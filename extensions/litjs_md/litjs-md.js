@@ -12,10 +12,11 @@ LitJS.extendWith({
       litjsMDRenderer.codespan = function(code) {
         var h = []
         var attRE = /\/\*litjs:[\t ]+((.)*)[\t ]+\*\//
-        var match = attRE.exec(code)
-        code = match ? code.replace(attRE,"") : code
         var classRE = /class=/
         var defaultClassAtt = !classRE.test(code) ? "class='inline'" : ""
+        var match = attRE.exec(code)
+        code = match ? code.replace(attRE,"") : code
+
         h.push("<code " + defaultClassAtt + " " +  ((match && match[1]) || '') + ">") //TODO: should support more classes somehow
           h.push(code)
         h.push("</code>")
