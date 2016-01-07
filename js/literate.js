@@ -128,7 +128,7 @@ var LitJS = {
 		}, this)
 
 		evaluateAndRender('litjs-inline-table',function(codeEl,result) {
-			if (typeof(result) != "object" || !(result.length))
+			if (typeof(result) != "object" || typeof(result.length) == "undefined")
 				throw "Can't render a non-array as a table"
 			var jqEl = $(codeEl)
 			var TBL_WRAPPER_INDICATOR = "tbl_wrapper"
