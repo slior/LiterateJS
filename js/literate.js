@@ -47,6 +47,8 @@ var LitJS = {
 										value = inp.checked
 									else if (inp.type == 'text')
 										value = "'" + value + "'"
+									else if (inp.type == 'radio')
+										value = inp.checked
 									return "var " + inp.id + " = " + value + ";"
 								})
 
