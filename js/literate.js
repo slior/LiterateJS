@@ -60,14 +60,31 @@ var LitJS = {
 
 		_evalInputs.call(this,_decorated(inputs))
 
+		if (!this.alreadyExtendedDefaultInputChange)
+		{
+			console.log('Extending input change')
+			LitJS.extendWith({
+				inputChange : function(inp) { //called with 'this' = LitJS
+					var existingLitJSInputsScriptElement = $("#" + litJSInputsScriptID)
+					if (existingLitJSInputsScriptElement && existingLitJSInputsScriptElement.remove) existingLitJSInputsScriptElement.remove();
+					_evalInputs.call(LitJS,_decorated(inputs))
+
+					var existingScriptBlockElement = $("#" + LitJS.BlocksScriptID)
+					if (existingScriptBlockElement && existingScriptBlockElement.remove) existingScriptBlockElement.remove();
+					LitJS.evalScriptBlocks();
+					LitJS.evalInline();
+				}
+			})
+			this.alreadyExtendedDefaultInputChange = true
+		}
+
 		$('input.lit-value').change(function(inp) { //naive implementation - for every change reevaluate all inputs
-			$("#" + litJSInputsScriptID).remove();
-			_evalInputs.call(LitJS,_decorated(inputs))
-
-			$("#" + LitJS.BlocksScriptID).remove();
-			LitJS.evalScriptBlocks();
-			LitJS.evalInline();
-
+			var inpChangeCallbacks = LitJS.extensions.allForHook('inputChange')
+			try {
+				inpChangeCallbacks.forEach(f => f.call(LitJS,inp.target));
+			} catch (e) {
+				console.log(e.toString())
+			}
 		})
 	},
 	createAndInsertJS : function(code,doc,id)
@@ -279,8 +296,8 @@ LitJS.extendWith({
 		h.push('</table>')
 		return h.join("");
 
-	},
-	preEval : function() { }
+	}
+	, preEval : function() { }
 
 })
 

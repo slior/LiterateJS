@@ -8,6 +8,11 @@
   <script src="../js/literate.js"></script>
 </head>
 <body>
+
+  <div>
+    <input id="dummy" type="text" class="lit-value"></input>
+  </div>
+
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
   <script src="http://code.jquery.com/qunit/qunit-1.18.0.js"></script>
@@ -174,7 +179,11 @@
 		LitJS.evalInputs(mockJQ)
 	})
 
-	_.module("Extensions")
+	_.module("Extensions",{
+    afterEach : function() {
+      $("#dummy").off('change')
+    }
+  })
 	_.test("Adding an extension",function(assert) {
 		var countBefore = LitJS.extensions.exts.length;
 		var testExt = { dummy : true }
@@ -229,6 +238,43 @@
     console.log = oldLog;
   })
 
+  _.test("Input Change Hooks",function(assert) {
+    var extensionsInvoked = [];
+    LitJS.extendWith({inputChange : function(inp) {
+      extensionsInvoked.push('ext3') }
+    })
+
+    LitJS.eval();
+    $("#dummy").change()
+    assert.deepEqual(extensionsInvoked,['ext3'] ,"Input change extension should be called when a litjs input is changed")
+
+    extensionsInvoked = []
+    LitJS.extendWith({inputChange : function(inp) {
+      extensionsInvoked.push('ext4') }
+    })
+
+    $("#dummy").change()
+    assert.deepEqual(extensionsInvoked,['ext3','ext4'] ,"If there's more than one input change extension, all should be called, by order extended")
+
+    var inputIDPassed = ""
+    LitJS.extendWith({inputChange : inp => {
+      inputIDPassed = $(inp)[0]
+    }})
+
+    $("#dummy").change()
+    assert.deepEqual(inputIDPassed,$('#dummy')[0] ,"Input change extension function gets passed the correct input element")
+
+    var errMsg = "Expected exception in input change extension"
+    LitJS.extendWith({inputChange : inp => { throw errMsg }})
+
+    var oldLog = console.log
+    var msgs = []
+    console.log = function(msg) { msgs.push(msg) }
+    $("#dummy").change()
+    assert.deepEqual(msgs,[errMsg] ,"Exceptions in input change hook are logged to console")
+    console.log = oldLog
+
+  })
 
   </script>
 </body>
