@@ -39,6 +39,21 @@ var LitJS = {
 
 		function _evalInputs(inputs)
 		{
+
+			function adjustInputValueByExtensions(_inp,value)
+			{
+				var inpEvalExts = LitJS.extensions.allForHook('inputEval')
+				var val = value;
+				for (var i = 0; i < inpEvalExts.length; i++) {
+					try {
+						val = inpEvalExts[i].call(LitJS,_inp,val)
+					} catch(e) {
+						console.log("ERROR Evaluating input eval extensions: " + e.toString())
+					}
+				}
+				return val;
+			}
+
 			var snippets = inputs
 								.filter(function(inp) { return inp.id ? true : false})
 								.map(function(inp) {
@@ -49,6 +64,8 @@ var LitJS = {
 										value = "'" + value + "'"
 									else if (inp.type == 'radio')
 										value = inp.checked
+									value = adjustInputValueByExtensions(inp,value);
+									$(inp).val(value)
 									return "var " + inp.id + " = " + value + ";"
 								})
 
