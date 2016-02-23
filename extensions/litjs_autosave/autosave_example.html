@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Example</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../css/LitJS.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+
+	<script type="text/javascript" src="../../js/literate.js"></script>
+  <script type="text/javascript" src="litjs-autosave.js"></script>
+
+	<style>
+
+	body {
+		padding-left:10px
+	}
+
+	p {
+		text-align:justify
+	}
+
+	blockquote {
+		font-size : 90%;
+	}
+
+	</style>
+
+    <script type="text/javascript">
+
+	function toggle(el)
+	{
+		el.text(el.text() == '-' ? '+' : '-')
+	}
+
+	hljs.initHighlightingOnLoad();
+
+	function pageLoaded()
+	{
+		LitJS.eval();
+	}
+
+	</script>
+</head>
+<body onload="pageLoaded()">
+
+<h2>Auto-Save Extension Example</h2>
+
+<p>
+Using the autosave extension, you can have literate JS inputs automatically saved to the local storage. <br/>
+This allows interactive literate documents to save state in a given browser, and resume work of the document when reloaded.
+</p>
+<p>
+  The example here is a simple interactive example, using various inputs.
+  When you change the inputs and reload the page, the literate js inputs should have the value loaded from the local storage, and not set as expected from the default HTML code.
+</p>
+
+<pre><code>
+var x = 5 * y;
+</code></pre>
+<p>
+which depends on the following input (y):
+</p>
+<input type=number id="y" value="5" class="lit-value"/>
+
+<p>
+And the value of x updates when value of y changes: <code class="inline">x</code>. <br/>
+In order for an input to be accessible from LitJS code blocks, it needs to have the <code>lit-value</code> class assigned to it.<br/>
+It should also have an id that is a valid Javascript identifier, and unique in this page. This id will be used to refer to the input in other code blocks.<br/>
+In the above example, the input is defined as:
+<pre>
+&lt;input type=number id="y" value="5" class="lit-value"/&gt;
+</pre>
+
+This should also take care of responding to inputs changing. Inline code blocks should be updated automatically.
+</p>
+<hr/>
+<p>
+As another example, let's try the fibonacci example, but driven by an input.
+The simple (non-tail recursive, no memoization) fibonacci series implementation is given in this code:
+</p>
+<pre title="Simple Fibonacci" collapsed><code>
+function fib(n)
+{
+	if (n < 0) return 0
+	if (n == 0)  return 1
+	if (n == 1)  return 1
+	return fib(n-1) + fib(n-2)
+}
+</code></pre>
+
+<p>
+So given the value of <code>num</code>: <input type=number id="num" value="3" class="lit-value"/><br/>
+We can calculate the <code>num</code><sup>th</sup> fibonnacci number to be: <code class=inline>fib(num-2)</code> + <code class=inline>fib(num-1)</code> = <code class=inline>fib(num)</code>
+<br/>
+Note: this is a very inefficient implementation, so even medium sized inputs will perform poorly.
+
+</p>
+
+<hr/>
+
+<p>
+One can also use other types of input, and respond to them in literate code blocks.<br/>
+For example, take this checkbox, <code>cb</code>: <input type="checkbox" id="cb" class="lit-value">Checked?</input>
+
+<pre><code>
+var s = "The box is" + (cb ? " " : " NOT ") + "checked"
+</code></pre>
+
+<p>With a result of: <code class="inline">s</code></p>
+
+</p>
+
+
+
+
+</body>
+</html>
