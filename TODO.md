@@ -35,3 +35,4 @@
 - ~~for inline code block, after evaluation - have an option to show underlying code, e.g. using a tooltip, or by clicking on it.~~
 - compiler/command line tool for generating a separate script out of a litjs document.
 - add the option to show hidden code blocks (by default - hidden)
+- extension to allow tracking of a variable/input in a large document.
