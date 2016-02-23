@@ -128,3 +128,10 @@ It is possible to write LiterateJS documents using [Markdown](https://en.wikiped
 
 The functionality is available using a separate optional extension to LiterateJS - [litjs-md](https://github.com/slior/LiterateJS/tree/master/extensions/litjs_md). Using this extension allows one to write simple markup documents, with code blocks, and using these as regular text documents.
 See the [extension's documentation](https://github.com/slior/LiterateJS/blob/master/extensions/litjs_md/Markdown_Support.md) for more details.
+
+## Auto-Saving
+
+Literate JS documents can be used as live documents. Meaning: changing values in them, and reloading at a later time.
+Using the optional [Auto Save extension](https://github.com/slior/LiterateJS/tree/master/extensions/litjs_autosave), values can be saved in the browser's local storate (automatically), and reloaded when the page is loaded later, in the same browser.
+
+
