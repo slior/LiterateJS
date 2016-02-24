@@ -60,13 +60,12 @@ var LitJS = {
 									var value = inp.value;
 									if (inp.type == 'checkbox')
 										value = inp.checked
-									else if (inp.type == 'text')
-										value = "'" + value + "'"
 									else if (inp.type == 'radio')
 										value = inp.checked
+									var beforeExtensions = value
 									value = adjustInputValueByExtensions(inp,value);
-									$(inp).val(value)
-									return "var " + inp.id + " = " + value + ";"
+									if (value != beforeExtensions) $(inp).val(value)
+									return "var " + inp.id + " = " + (inp.type == 'text' ? "'" + value + "'" : value) + ";"
 								})
 
 			if (snippets.length > 0)
