@@ -3,7 +3,10 @@ LitJS.extendWith({
   inputChange : function(inp)
   {
     if (!inp) return;
-    localStorage[inp.id] = inp.value
+	var value = inp.type == 'checkbox' || inp.type == 'radio' ?
+				  inp.checked
+				  : inp.value
+    localStorage[inp.id] = value
   }
 
   , inputEval : function(inp,value)
