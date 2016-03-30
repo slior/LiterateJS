@@ -36,3 +36,4 @@
 - compiler/command line tool for generating a separate script out of a litjs document.
 - add the option to show hidden code blocks (by default - hidden)
 - extension to allow tracking of a variable/input in a large document.
+- bug: allow multiple classes for inline code fragments in markdown extension
