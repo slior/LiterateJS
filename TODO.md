@@ -31,10 +31,11 @@
 - allow integration with external code
 - literate code templates.
 - add the option to easily show/hide hidden code blocks
-- for collapsed code block - tooltip that shows the code.
+- ~~for collapsed code block - tooltip that shows the code.~~
 - ~~for inline code block, after evaluation - have an option to show underlying code, e.g. using a tooltip, or by clicking on it.~~
 - compiler/command line tool for generating a separate script out of a litjs document.
 - add the option to show hidden code blocks (by default - hidden)
 - extension to allow tracking of a variable/input in a large document.
 - bug: allow multiple classes for inline code fragments in markdown extension
 - loading and showing data files
+- better packaging for extensions?
