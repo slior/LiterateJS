@@ -186,8 +186,10 @@ var LitJS = {
 		if (!_id) throw "Can't wrap in panel: missing block ID";
 		var id = _id
 
-		var panelExtension = this.extensions.singleForHook("panelWrap",preElement);
-		panelExtension.call(this,preElement,title,collapsible,id,collapsed)
+		var panelExtensions = this.extensions.allForHook("panelWrap",preElement);
+    var lastExtensionResult = {codeEl : preElement}
+		for (var i = 0; i < panelExtensions.length; i++)
+				lastExtensionResult = panelExtensions[i].call(this,lastExtensionResult,title,collapsible,id,collapsed)
 
 	},
 	toggleCollapseSymbol : function(el)
@@ -275,15 +277,18 @@ var LitJS = {
 
 //// Default Behavior (extension)
 LitJS.extendWith({
-	panelWrap : function(preElement,title,collapsible,id,collapsed)
+  panelWrap : function(panelElements,title,collapsible,id,collapsed)
 	{
+    var preElement = panelElements.codeEl;
+    if (!preElement) throw new Error("code element (pre) must be given to defaul panel wrap")
 		preElement.wrap("<div class='panel panel-info'><div class='panel-body' id='" + id + "'></div></div>")
 		var bodyDiv = preElement.parent()
 		var toggleSymbol = collapsed ? '+' : '-';
 		var collapseLink = collapsible ? " <a href=\"javascript:$('#" + id + "').toggle(); LitJS.toggleCollapseSymbol($('#" + id + "').parent().children('.panel-heading').children())\">[" + toggleSymbol + "]</a>" : ""
 		bodyDiv.before("<div class='panel-heading'>" + (title||"Code") + collapseLink + "</div>")
-		if (collapsed)
+		if (collapsed) //if it's collapsed by default - then collapse it now
 			$("#" + id).toggle();
+		return {headingEl : bodyDiv.prev(), codeEl : preElement};
 	},
 	blockErrorHandler : function(blockID) {
 		return "alert('Error in block " + blockID + ": ' + exn);"
