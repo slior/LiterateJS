@@ -132,6 +132,6 @@ See the [extension's documentation](https://github.com/slior/LiterateJS/blob/mas
 ## Auto-Saving
 
 Literate JS documents can be used as live documents. Meaning: changing values in them, and reloading at a later time.
-Using the optional [Auto Save extension](https://github.com/slior/LiterateJS/tree/master/extensions/litjs_autosave), values can be saved in the browser's local storate (automatically), and reloaded when the page is loaded later, in the same browser.
+Using the optional [Auto Save extension](https://github.com/slior/LiterateJS/tree/master/extensions/litjs_autosave), values can be saved in the browser's local storage (automatically), and reloaded when the page is loaded later, in the same browser.
 
 
